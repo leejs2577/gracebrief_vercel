@@ -1,0 +1,404 @@
+/* ═══════════════════════════════════════════════════════
+   App.js — Main Controller (Gemini Only)
+   - Lucide Icons aware
+   - Glass-morphism HTML structure
+   - Dark mode class-based (Tailwind 'dark' class)
+   ═══════════════════════════════════════════════════════ */
+
+(function () {
+  'use strict';
+
+  // ─── State ───
+  let currentData = null;
+  let currentVideoInfo = null;
+  let isAnalyzing = false;
+
+  // ─── DOM Helpers ───
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  // ─── Init ───
+  document.addEventListener('DOMContentLoaded', init);
+
+  function init() {
+    setupTheme();
+    setupApiModal();
+    setupUrlInput();
+    setupAnalyze();
+    setupExportButtons();
+    updateApiStatus();
+  }
+
+  // ═══════════════════════════════════════
+  // THEME (Dark / Light)
+  // ═══════════════════════════════════════
+  function setupTheme() {
+    const saved = localStorage.getItem('sermon_analyzer_theme');
+    if (saved === 'dark') {
+      document.documentElement.classList.add('dark');
+      updateThemeIcon('dark');
+    }
+
+    $('#btnThemeToggle').addEventListener('click', () => {
+      const isDark = document.documentElement.classList.toggle('dark');
+      const next = isDark ? 'dark' : 'light';
+      localStorage.setItem('sermon_analyzer_theme', next);
+      updateThemeIcon(next);
+    });
+  }
+
+  function updateThemeIcon(theme) {
+    const iconEl = $('#themeIcon');
+    if (iconEl) {
+      iconEl.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // API MODAL (Gemini only)
+  // ═══════════════════════════════════════
+  function setupApiModal() {
+    const modal = $('#apiModal');
+
+    // Open
+    $('#btnApiSettings').addEventListener('click', () => {
+      loadApiConfig();
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    });
+
+    // Close
+    $('#btnCloseModal').addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+
+    function closeModal() {
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    // Toggle Password Visibility
+    $$('.toggle-visibility').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const targetId = btn.getAttribute('data-target');
+        const input = $(`#${targetId}`);
+        const iconEl = btn.querySelector('[data-lucide]');
+        if (input.type === 'password') {
+          input.type = 'text';
+          if (iconEl) iconEl.setAttribute('data-lucide', 'eye-off');
+        } else {
+          input.type = 'password';
+          if (iconEl) iconEl.setAttribute('data-lucide', 'eye');
+        }
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      });
+    });
+
+    // Save
+    $('#btnSaveApi').addEventListener('click', () => {
+      saveApiConfig();
+      closeModal();
+    });
+  }
+
+  function loadApiConfig() {
+    const config = ApiConfig.get();
+    $('#geminiApiKey').value = config.keys.gemini || '';
+    $('#modelSelect').value = config.model;
+  }
+
+  function saveApiConfig() {
+    const model = $('#modelSelect').value;
+    const keys = {
+      gemini: $('#geminiApiKey').value.trim()
+    };
+
+    ApiConfig.update({ model, keys });
+    updateApiStatus();
+    showToast('success', 'API 설정이 저장되었습니다.');
+  }
+
+  function updateApiStatus() {
+    const statusDot = $('#apiStatus .status-dot');
+    const statusText = $('#apiStatus .status-text');
+
+    if (ApiConfig.isConfigured()) {
+      const model = ApiConfig.getModel();
+      statusDot.className = 'status-dot status-active';
+      statusText.innerHTML = `<strong class="text-gray-600 dark:text-gray-300">Gemini</strong> <span class="text-gray-400">(${model})</span> 연결됨`;
+    } else {
+      statusDot.className = 'status-dot status-inactive';
+      statusText.innerHTML = 'Gemini API 키가 설정되지 않았습니다. 상단의 <strong class="text-gray-500 dark:text-gray-400">API 설정</strong>을 먼저 완료해주세요.';
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // URL INPUT
+  // ═══════════════════════════════════════
+  function setupUrlInput() {
+    const input = $('#youtubeUrl');
+    const clearBtn = $('#btnClearUrl');
+
+    input.addEventListener('input', () => {
+      if (input.value.length > 0) {
+        clearBtn.classList.remove('hidden');
+      } else {
+        clearBtn.classList.add('hidden');
+      }
+    });
+
+    clearBtn.addEventListener('click', () => {
+      input.value = '';
+      clearBtn.classList.add('hidden');
+      input.focus();
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        $('#btnAnalyze').click();
+      }
+    });
+  }
+
+  // ═══════════════════════════════════════
+  // ANALYZE WORKFLOW
+  // ═══════════════════════════════════════
+  function setupAnalyze() {
+    $('#btnAnalyze').addEventListener('click', startAnalysis);
+    $('#btnRetry').addEventListener('click', startAnalysis);
+  }
+
+  async function startAnalysis() {
+    if (isAnalyzing) return;
+
+    const url = $('#youtubeUrl').value.trim();
+    if (!url) {
+      showToast('error', 'YouTube URL을 입력해주세요.');
+      $('#youtubeUrl').focus();
+      return;
+    }
+
+    const videoId = YouTube.extractVideoId(url);
+    if (!videoId) {
+      showToast('error', '유효한 YouTube URL이 아닙니다.');
+      return;
+    }
+
+    if (!ApiConfig.isConfigured()) {
+      showToast('error', 'Gemini API 키를 먼저 설정해주세요.');
+      $('#btnApiSettings').click();
+      return;
+    }
+
+    isAnalyzing = true;
+    currentData = null;
+    currentVideoInfo = null;
+
+    hideSection('videoPreview');
+    hideSection('resultSection');
+    hideSection('errorSection');
+    showSection('progressSection');
+    resetProgress();
+    disableAnalyzeBtn(true);
+
+    // Gemini 직접 분석: 자막 추출 단계 스킵
+    updateStep('step2', 'done', 'Gemini 영상 직접 분석 — 스킵');
+
+    try {
+      // Step 1: 영상 정보 추출
+      updateStep('step1', 'active', '정보 추출 중...');
+      updateProgressBar(15);
+
+      const videoInfo = await YouTube.fetchVideoInfo(videoId);
+      currentVideoInfo = videoInfo;
+
+      showVideoPreview(videoInfo);
+      updateStep('step1', 'done', '완료');
+      updateProgressBar(30);
+
+      // Step 2: 스킵
+      updateProgressBar(50);
+
+      // Step 3: Gemini 분석 (영상 시청 + 웹서칭)
+      updateStep('step3', 'active', 'Gemini가 영상 시청 + 웹서칭 중... (1~3분 소요)');
+      updateProgressBar(60);
+
+      const analysisResult = await Analyzer.analyze(videoInfo);
+      currentData = analysisResult;
+
+      updateStep('step3', 'done', '완료');
+      updateProgressBar(100);
+
+      // Render
+      await sleep(400);
+      hideSection('progressSection');
+      Renderer.render(analysisResult);
+      showSection('resultSection');
+
+      if (typeof AOS !== 'undefined') AOS.refresh();
+      showToast('success', '설교 분석이 완료되었습니다!');
+
+    } catch (error) {
+      console.error('Analysis error:', error);
+      showError(error.message || '분석 중 알 수 없는 오류가 발생했습니다.');
+
+      ['step1', 'step2', 'step3'].forEach(id => {
+        const el = $(`#${id}`);
+        if (el.classList.contains('active')) {
+          updateStep(id, 'error', '실패');
+        }
+      });
+    } finally {
+      isAnalyzing = false;
+      disableAnalyzeBtn(false);
+    }
+  }
+
+  // ═══════════════════════════════════════
+  // EXPORT BUTTONS
+  // ═══════════════════════════════════════
+  function setupExportButtons() {
+    $('#btnExportMd').addEventListener('click', () => {
+      if (!currentData) return;
+      Renderer.exportMarkdown(currentData, currentVideoInfo);
+      showToast('success', 'Markdown 파일이 다운로드됩니다.');
+    });
+
+    $('#btnExportPdf').addEventListener('click', async () => {
+      if (!currentData) return;
+      const btn = $('#btnExportPdf');
+      btn.classList.add('loading');
+      btn.innerHTML = '<span class="spinner"></span> 생성 중...';
+      try {
+        await Renderer.exportPdf(currentData);
+        showToast('success', 'PDF 파일이 다운로드됩니다.');
+      } catch (e) {
+        showToast('error', 'PDF 생성에 실패했습니다.');
+      } finally {
+        btn.classList.remove('loading');
+        btn.innerHTML = '<i data-lucide="file-down" class="w-3.5 h-3.5"></i> PDF';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+    });
+
+    $('#btnExportImage').addEventListener('click', async () => {
+      if (!currentData) return;
+      const btn = $('#btnExportImage');
+      btn.classList.add('loading');
+      btn.innerHTML = '<span class="spinner"></span> 캡처 중...';
+      try {
+        await Renderer.exportImage(currentData);
+        showToast('success', '이미지가 다운로드됩니다.');
+      } catch (e) {
+        showToast('error', '이미지 캡처에 실패했습니다.');
+      } finally {
+        btn.classList.remove('loading');
+        btn.innerHTML = '<i data-lucide="image" class="w-3.5 h-3.5"></i> 이미지';
+        if (typeof lucide !== 'undefined') lucide.createIcons();
+      }
+    });
+
+    $('#btnCopyClipboard').addEventListener('click', () => {
+      if (!currentData) return;
+      const md = Renderer.generateMarkdown(currentData, currentVideoInfo);
+      navigator.clipboard.writeText(md).then(() => {
+        showToast('success', '클립보드에 복사되었습니다.');
+      }).catch(() => {
+        showToast('error', '복사에 실패했습니다.');
+      });
+    });
+  }
+
+  // ═══════════════════════════════════════
+  // UI HELPERS
+  // ═══════════════════════════════════════
+  function showSection(id) {
+    const el = $(`#${id}`);
+    if (el) el.classList.remove('hidden');
+  }
+
+  function hideSection(id) {
+    const el = $(`#${id}`);
+    if (el) el.classList.add('hidden');
+  }
+
+  function showVideoPreview(info) {
+    $('#videoThumbnail').src = info.thumbnail;
+    $('#videoThumbnail').onerror = () => {
+      $('#videoThumbnail').src = info.thumbnailHq;
+    };
+    $('#videoTitle').textContent = info.title;
+    $('#videoChannel').textContent = info.channel;
+
+    const overlay = $('#thumbnailOverlay');
+    if (overlay) {
+      overlay.onclick = () => window.open(info.url, '_blank');
+    }
+
+    showSection('videoPreview');
+  }
+
+  function resetProgress() {
+    ['step1', 'step2', 'step3'].forEach(id => {
+      const el = $(`#${id}`);
+      el.className = 'progress-step';
+      el.querySelector('.step-status').textContent = '대기 중';
+    });
+    updateProgressBar(0);
+  }
+
+  function updateStep(id, state, statusText) {
+    const el = $(`#${id}`);
+    el.className = `progress-step ${state}`;
+    el.querySelector('.step-status').textContent = statusText;
+  }
+
+  function updateProgressBar(percent) {
+    $('#progressBar').style.width = `${percent}%`;
+  }
+
+  function disableAnalyzeBtn(disabled) {
+    const btn = $('#btnAnalyze');
+    btn.disabled = disabled;
+    if (disabled) {
+      btn.innerHTML = '<span class="spinner"></span><span>분석 중...</span>';
+    } else {
+      btn.innerHTML = '<i data-lucide="scan-search" class="w-4 h-4"></i><span>분석 시작</span>';
+      if (typeof lucide !== 'undefined') lucide.createIcons();
+    }
+  }
+
+  function showError(message) {
+    $('#errorMessage').textContent = message;
+    hideSection('progressSection');
+    showSection('errorSection');
+  }
+
+  // ─── Toast ───
+  function showToast(type, message) {
+    document.querySelectorAll('.toast').forEach(t => t.remove());
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    const iconName = type === 'success' ? 'check-circle-2' : 'alert-circle';
+    toast.innerHTML = `<i data-lucide="${iconName}" class="w-4 h-4 flex-shrink-0"></i><span>${message}</span>`;
+    document.body.appendChild(toast);
+
+    if (typeof lucide !== 'undefined') lucide.createIcons();
+
+    setTimeout(() => {
+      toast.style.opacity = '0';
+      toast.style.transform = 'translateY(10px)';
+      toast.style.transition = 'all 0.3s ease';
+      setTimeout(() => toast.remove(), 300);
+    }, 3000);
+  }
+
+  function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
+})();

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>설교 분석기 — Sermon Analyzer</title>
+  <meta name="description" content="YouTube 설교 영상을 AI로 깊이 분석하여 요약, 정리, 묵상 포인트를 제공합니다.">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Pretendard', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            serif: ['Noto Serif KR', 'Georgia', 'serif'],
+          },
+          colors: {
+            brand: {
+              50: '#f0f0ff',
+              100: '#e0e0ff',
+              200: '#c7c4ff',
+              300: '#a5a0ff',
+              400: '#8578ff',
+              500: '#6c52ff',
+              600: '#5c30f5',
+              700: '#4f22e1',
+              800: '#411cbd',
+              900: '#371a9a',
+              950: '#1f0e5e',
+            }
+          },
+          animation: {
+            'float': 'float 6s ease-in-out infinite',
+            'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+            'slide-up': 'slideUp 0.5s ease-out',
+            'fade-in': 'fadeIn 0.4s ease-out',
+            'shimmer': 'shimmer 2s linear infinite',
+          },
+          keyframes: {
+            float: {
+              '0%, 100%': { transform: 'translateY(0px)' },
+              '50%': { transform: 'translateY(-10px)' },
+            },
+            pulseSoft: {
+              '0%, 100%': { opacity: 1 },
+              '50%': { opacity: 0.6 },
+            },
+            slideUp: {
+              '0%': { transform: 'translateY(20px)', opacity: 0 },
+              '100%': { transform: 'translateY(0)', opacity: 1 },
+            },
+            fadeIn: {
+              '0%': { opacity: 0 },
+              '100%': { opacity: 1 },
+            },
+            shimmer: {
+              '0%': { backgroundPosition: '-200% 0' },
+              '100%': { backgroundPosition: '200% 0' },
+            },
+          },
+          backdropBlur: {
+            xs: '2px',
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+
+  <!-- Lucide Icons -->
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
+
+  <!-- AOS - Animate On Scroll -->
+  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+
+  <!-- Export Libraries -->
+  <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/html2pdf.js@0.10.1/dist/html2pdf.bundle.min.js"></script>
+
+  <!-- App CSS -->
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-500 min-h-screen">
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- AMBIENT BACKGROUND                           -->
+  <!-- ════════════════════════════════════════════ -->
+  <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
+    <div class="ambient-orb ambient-orb-1"></div>
+    <div class="ambient-orb ambient-orb-2"></div>
+    <div class="ambient-orb ambient-orb-3"></div>
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- NAVIGATION BAR                               -->
+  <!-- ════════════════════════════════════════════ -->
+  <nav class="sticky top-0 z-50 glass-nav border-b border-white/10 dark:border-white/5">
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Brand -->
+      <a href="#" class="flex items-center gap-2.5 group">
+        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/25 group-hover:shadow-brand-500/40 transition-shadow">
+          <i data-lucide="book-open" class="w-4.5 h-4.5 text-white" style="width:18px;height:18px;"></i>
+        </div>
+        <div class="flex flex-col">
+          <span class="text-sm font-bold tracking-tight leading-none">설교 분석기</span>
+          <span class="text-[10px] text-gray-400 dark:text-gray-500 font-medium leading-none mt-0.5">Sermon Analyzer</span>
+        </div>
+      </a>
+
+      <!-- Actions -->
+      <div class="flex items-center gap-2">
+        <button id="btnApiSettings"
+                class="nav-btn group"
+                title="API 키 설정">
+          <i data-lucide="settings" class="w-4 h-4 group-hover:rotate-90 transition-transform duration-300"></i>
+          <span class="hidden sm:inline text-xs font-semibold">API 설정</span>
+        </button>
+        <button id="btnThemeToggle"
+                class="nav-btn"
+                title="테마 전환">
+          <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- API KEY SETTINGS MODAL                       -->
+  <!-- ════════════════════════════════════════════ -->
+  <div id="apiModal" class="fixed inset-0 z-[200] hidden items-center justify-center p-4"
+       style="background:rgba(0,0,0,0.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);">
+    <div class="modal-panel w-full max-w-md animate-slide-up" onclick="event.stopPropagation()">
+      <!-- Header -->
+      <div class="flex items-center justify-between p-5 border-b border-gray-200/80 dark:border-gray-700/80">
+        <div class="flex items-center gap-2.5">
+          <div class="w-8 h-8 rounded-lg bg-brand-500/10 dark:bg-brand-400/10 flex items-center justify-center">
+            <i data-lucide="key-round" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
+          </div>
+          <h2 class="text-base font-bold">Gemini API 키 설정</h2>
+        </div>
+        <button id="btnCloseModal" class="w-8 h-8 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 flex items-center justify-center transition-colors">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <!-- Body -->
+      <div class="p-5 space-y-5">
+        <!-- Security Notice -->
+        <div class="flex items-start gap-2.5 p-3 rounded-xl bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200/60 dark:border-emerald-800/40">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600 dark:text-emerald-400 mt-0.5 flex-shrink-0"></i>
+          <p class="text-xs text-emerald-700 dark:text-emerald-300 leading-relaxed">
+            API 키는 브라우저 LocalStorage에만 저장되며, 선택한 AI 서비스에 직접 요청할 때만 사용됩니다.
+          </p>
+        </div>
+
+        <!-- API Key Input -->
+        <div id="geminiKeyGroup" class="space-y-2">
+          <label class="text-xs font-semibold text-gray-500 dark:text-gray-400">Gemini API Key</label>
+          <div class="relative">
+            <input type="password" id="geminiApiKey"
+                   class="input-field pr-10"
+                   placeholder="AIza... 형식의 키를 입력하세요" autocomplete="off">
+            <button class="toggle-visibility absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+                    data-target="geminiApiKey">
+              <i data-lucide="eye" class="w-3.5 h-3.5 text-gray-400"></i>
+            </button>
+          </div>
+          <a href="https://aistudio.google.com/app/apikey" target="_blank"
+             class="inline-flex items-center gap-1 text-[11px] text-brand-600 dark:text-brand-400 hover:underline">
+            <i data-lucide="external-link" class="w-3 h-3"></i> Google AI Studio에서 발급받기
+          </a>
+        </div>
+
+        <!-- Model Selection -->
+        <div class="space-y-2">
+          <label class="text-xs font-semibold text-gray-500 dark:text-gray-400">모델 선택</label>
+          <select id="modelSelect" class="input-field appearance-none cursor-pointer">
+            <option value="gemini-3.1-flash-lite-preview">Gemini 3.1 Flash Lite (권장·빠름)</option>
+            <option value="gemini-3-flash-preview">Gemini 3 Flash (고품질)</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <div class="p-5 pt-0">
+        <button id="btnSaveApi"
+                class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-700 hover:to-brand-600 text-white text-sm font-bold shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 transition-all duration-300 flex items-center justify-center gap-2">
+          <i data-lucide="check" class="w-4 h-4"></i>
+          저장하기
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ════════════════════════════════════════════ -->
+  <!-- MAIN CONTENT                                 -->
+  <!-- ════════════════════════════════════════════ -->
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 pt-12 pb-24">
+
+    <!-- HERO / INPUT SECTION -->
+    <section class="text-center mb-10" data-aos="fade-up" data-aos-duration="800">
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-200/60 dark:border-brand-700/40 text-brand-700 dark:text-brand-300 text-[11px] font-semibold mb-5">
+        <i data-lucide="sparkles" class="w-3 h-3"></i>
+        Gemini AI 기반 설교 분석
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-4">
+        YouTube 설교 영상을<br>
+        <span class="bg-gradient-to-r from-brand-600 to-violet-500 dark:from-brand-400 dark:to-violet-400 bg-clip-text text-transparent">AI로 깊이 분석</span>합니다
+      </h1>
+      <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed mb-8">
+        설교 영상의 URL을 입력하면 AI가 영상을 직접 시청하고<br class="hidden sm:inline">
+        요약 · 정리 · 묵상 포인트로 분석해드립니다
+      </p>
+
+      <!-- Input Card -->
+      <div class="glass-card p-4 sm:p-5 mx-auto max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <div class="flex-1 relative group">
+            <div class="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center">
+              <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
+              </svg>
+            </div>
+            <input type="text" id="youtubeUrl"
+                   class="w-full pl-11 pr-9 py-3 sm:py-3.5 rounded-xl border border-gray-200 dark:border-gray-700 bg-white/80 dark:bg-gray-800/80 text-sm placeholder-gray-400 dark:placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-brand-500/40 focus:border-brand-500 transition-all duration-300"
+                   placeholder="YouTube 설교 영상 URL을 붙여넣으세요"
+                   autocomplete="off">
+            <button id="btnClearUrl" class="absolute right-2.5 top-1/2 -translate-y-1/2 p-1 rounded-md hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors hidden"
+                    title="지우기">
+              <i data-lucide="x-circle" class="w-4 h-4 text-gray-400"></i>
+            </button>
+          </div>
+          <button id="btnAnalyze"
+                  class="btn-primary px-6 py-3 sm:py-3.5 rounded-xl text-sm font-bold flex items-center justify-center gap-2 whitespace-nowrap">
+            <i data-lucide="scan-search" class="w-4 h-4"></i>
+            <span>분석 시작</span>
+          </button>
+        </div>
+
+        <!-- API Status -->
+        <div class="flex items-center gap-2 mt-3 px-1" id="apiStatus">
+          <span class="status-dot status-inactive"></span>
+          <span class="status-text text-xs text-gray-400 dark:text-gray-500">
+            API 키가 설정되지 않았습니다. 상단의 <strong class="text-gray-500 dark:text-gray-400">API 설정</strong>을 먼저 완료해주세요.
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- VIDEO PREVIEW (hidden) -->
+    <section id="videoPreview" class="mb-6 hidden" data-aos="fade-up">
+      <div class="glass-card p-3 flex flex-col sm:flex-row gap-4 items-center">
+        <div class="relative w-full sm:w-48 flex-shrink-0 aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
+          <img id="videoThumbnail" src="" alt="Video thumbnail" class="w-full h-full object-cover">
+          <div class="absolute inset-0 flex items-center justify-center bg-black/20 opacity-0 hover:opacity-100 transition-opacity cursor-pointer" id="thumbnailOverlay">
+            <div class="w-10 h-10 rounded-full bg-white/90 flex items-center justify-center shadow-lg">
+              <i data-lucide="play" class="w-5 h-5 text-gray-900 ml-0.5"></i>
+            </div>
+          </div>
+        </div>
+        <div class="flex-1 min-w-0">
+          <h3 id="videoTitle" class="text-sm font-bold leading-snug line-clamp-2 mb-1"></h3>
+          <p id="videoChannel" class="text-xs text-gray-400 dark:text-gray-500"></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRESS SECTION (hidden) -->
+    <section id="progressSection" class="mb-6 hidden">
+      <div class="glass-card p-5 sm:p-6" data-aos="fade-up">
+        <div class="flex items-center gap-2 mb-5">
+          <div class="w-6 h-6 rounded-md bg-brand-500/10 flex items-center justify-center">
+            <i data-lucide="loader-2" class="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 animate-spin"></i>
+          </div>
+          <h3 class="text-sm font-bold text-brand-600 dark:text-brand-400">분석 진행 중</h3>
+        </div>
+
+        <div class="space-y-3 mb-5">
+          <!-- Step 1 -->
+          <div class="progress-step" id="step1">
+            <div class="step-icon-wrap">
+              <i data-lucide="video" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="step-title">영상 정보 추출</p>
+              <p class="step-status">대기 중</p>
+            </div>
+          </div>
+          <!-- Step 2 -->
+          <div class="progress-step" id="step2">
+            <div class="step-icon-wrap">
+              <i data-lucide="file-audio" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="step-title">영상 데이터 준비</p>
+              <p class="step-status">대기 중</p>
+            </div>
+          </div>
+          <!-- Step 3 -->
+          <div class="progress-step" id="step3">
+            <div class="step-icon-wrap">
+              <i data-lucide="brain" class="w-4 h-4"></i>
+            </div>
+            <div class="flex-1 min-w-0">
+              <p class="step-title">Gemini 영상 분석</p>
+              <p class="step-status">대기 중</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Progress Bar -->
+        <div class="h-1.5 rounded-full bg-gray-200/60 dark:bg-gray-700/60 overflow-hidden">
+          <div id="progressBar" class="h-full rounded-full bg-gradient-to-r from-brand-600 to-violet-500 transition-all duration-700 ease-out" style="width:0%"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ERROR SECTION (hidden) -->
+    <section id="errorSection" class="mb-6 hidden">
+      <div class="glass-card p-8 text-center" data-aos="fade-up">
+        <div class="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
+          <i data-lucide="alert-triangle" class="w-7 h-7 text-red-500"></i>
+        </div>
+        <h3 class="text-base font-bold mb-2">오류가 발생했습니다</h3>
+        <p id="errorMessage" class="text-sm text-gray-500 dark:text-gray-400 mb-5 max-w-sm mx-auto leading-relaxed"></p>
+        <button id="btnRetry" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl border border-gray-200 dark:border-gray-700 text-sm font-semibold hover:border-brand-500 hover:text-brand-600 dark:hover:text-brand-400 transition-all">
+          <i data-lucide="refresh-cw" class="w-4 h-4"></i> 다시 시도
+        </button>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════ -->
+    <!-- RESULT SECTION (hidden)                  -->
+    <!-- ════════════════════════════════════════ -->
+    <section id="resultSection" class="hidden">
+
+      <!-- Export Toolbar -->
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5 p-3 rounded-2xl glass-card" data-aos="fade-up">
+        <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
+          <i data-lucide="download" class="w-4 h-4"></i>
+          내보내기
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button id="btnExportMd" class="export-btn" title="Markdown">
+            <i data-lucide="file-text" class="w-3.5 h-3.5"></i> MD
+          </button>
+          <button id="btnExportPdf" class="export-btn" title="PDF">
+            <i data-lucide="file-down" class="w-3.5 h-3.5"></i> PDF
+          </button>
+          <button id="btnExportImage" class="export-btn" title="이미지">
+            <i data-lucide="image" class="w-3.5 h-3.5"></i> 이미지
+          </button>
+          <button id="btnCopyClipboard" class="export-btn" title="클립보드 복사">
+            <i data-lucide="copy" class="w-3.5 h-3.5"></i> 복사
+          </button>
+        </div>
+      </div>
+
+      <!-- Capturable Result Area -->
+      <div id="resultContent" class="space-y-5">
+
+        <!-- Sermon Info Card -->
+        <div class="sermon-info-card" id="sermonInfoCard" data-aos="fade-up">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span id="sermonType" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand-500 text-white text-[11px] font-bold shadow-sm">주일예배</span>
+          </div>
+          <h2 class="font-serif text-xl sm:text-2xl font-black leading-tight mb-4" id="sermonTitle">설교 제목</h2>
+          <div class="flex flex-wrap gap-x-5 gap-y-2 mb-4">
+            <div class="meta-item">
+              <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
+              <span id="sermonDate">날짜</span>
+            </div>
+            <div class="meta-item">
+              <i data-lucide="user" class="w-3.5 h-3.5"></i>
+              <span id="sermonPreacher">설교자</span>
+            </div>
+            <div class="meta-item">
+              <i data-lucide="book-open" class="w-3.5 h-3.5"></i>
+              <span id="sermonScripture">성경 본문</span>
+            </div>
+          </div>
+          <div id="sermonTags" class="flex flex-wrap gap-1.5"></div>
+        </div>
+
+        <!-- 1) Summary -->
+        <div class="result-block" data-aos="fade-up" data-aos-delay="100">
+          <div class="block-header block-header-summary">
+            <div class="block-icon bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
+              <i data-lucide="bookmark" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold">설교 전체 요약</h3>
+          </div>
+          <div class="block-body">
+            <div id="summaryText" class="summary-text font-serif text-base leading-[1.9] text-gray-700 dark:text-gray-300"></div>
+          </div>
+        </div>
+
+        <!-- 2) Content Sections -->
+        <div class="result-block" data-aos="fade-up" data-aos-delay="200">
+          <div class="block-header block-header-content">
+            <div class="block-icon bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400">
+              <i data-lucide="list-ordered" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold">내용 정리</h3>
+          </div>
+          <div class="block-body" id="contentSections">
+            <!-- Dynamically generated -->
+          </div>
+        </div>
+
+        <!-- 3) Conclusion & Meditation -->
+        <div class="result-block" data-aos="fade-up" data-aos-delay="300">
+          <div class="block-header block-header-meditation">
+            <div class="block-icon bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400">
+              <i data-lucide="heart-handshake" class="w-4 h-4"></i>
+            </div>
+            <h3 class="text-sm font-bold">결론 및 묵상</h3>
+          </div>
+          <div class="block-body space-y-5">
+            <div id="conclusionText" class="conclusion-text"></div>
+            <div id="meditationQuestions" class="meditation-questions"></div>
+            <blockquote id="closingVerse" class="closing-verse"></blockquote>
+          </div>
+        </div>
+
+      </div><!-- /#resultContent -->
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-200/60 dark:border-gray-800/60 py-6">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <p class="text-xs text-gray-400 dark:text-gray-600">
+        © 2026 설교 분석기 — AI 기반 설교 요약·분석 도구
+      </p>
+    </div>
+  </footer>
+
+  <!-- App Scripts -->
+  <script src="js/api-config.js"></script>
+  <script src="js/youtube.js"></script>
+  <script src="js/llm-provider.js"></script>
+  <script src="js/analyzer.js"></script>
+  <script src="js/renderer.js"></script>
+  <script src="js/app.js"></script>
+
+  <!-- Init AOS & Lucide -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      AOS.init({
+        once: true,
+        offset: 50,
+        duration: 600,
+        easing: 'ease-out-cubic',
+      });
+    });
+  </script>
+</body>
+</html>
