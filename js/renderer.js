@@ -329,22 +329,6 @@ const Renderer = (() => {
     const prevScrollY = window.scrollY;
     window.scrollTo(0, 0);
 
-    // html2canvas 미지원 속성(box-decoration-break, linear-gradient) 임시 교체
-    const marks = element.querySelectorAll('.highlight-mark');
-    const origStyles = [];
-    marks.forEach(m => {
-      origStyles.push({
-        background:               m.style.background,
-        backgroundImage:          m.style.backgroundImage,
-        boxDecorationBreak:       m.style.boxDecorationBreak,
-        webkitBoxDecorationBreak: m.style.webkitBoxDecorationBreak,
-      });
-      m.style.background               = 'rgba(251, 191, 36, 0.3)';
-      m.style.backgroundImage          = 'none';
-      m.style.boxDecorationBreak       = 'slice';
-      m.style.webkitBoxDecorationBreak = 'slice';
-    });
-
     try {
       // 웹 폰트 로딩 완료 대기 (Pretendard, Noto Serif KR)
       await document.fonts.ready;
@@ -356,8 +340,8 @@ const Renderer = (() => {
         logging: false,
         backgroundColor: null,
         height: element.scrollHeight,
-        width: element.scrollWidth,
-        windowWidth: document.documentElement.offsetWidth,
+        width: element.offsetWidth,
+        windowWidth: element.offsetWidth,
         windowHeight: element.scrollHeight,
         scrollX: 0,
         scrollY: 0
@@ -366,13 +350,6 @@ const Renderer = (() => {
       const blob = await new Promise(r => canvas.toBlob(r, 'image/png', 1.0));
       if (blob) triggerDownload(blob, filename);
     } finally {
-      // 원래 스타일 복원
-      marks.forEach((m, i) => {
-        m.style.background               = origStyles[i].background;
-        m.style.backgroundImage          = origStyles[i].backgroundImage;
-        m.style.boxDecorationBreak       = origStyles[i].boxDecorationBreak;
-        m.style.webkitBoxDecorationBreak = origStyles[i].webkitBoxDecorationBreak;
-      });
       window.scrollTo(prevScrollX, prevScrollY);
     }
   }
