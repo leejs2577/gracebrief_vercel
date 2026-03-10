@@ -14,36 +14,46 @@
       theme: {
         extend: {
           fontFamily: {
-            sans: ['Pretendard', 'Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
+            sans: ['Pretendard', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'],
             serif: ['Noto Serif KR', 'Georgia', 'serif'],
           },
           colors: {
             brand: {
-              50: '#f0f0ff',
-              100: '#e0e0ff',
-              200: '#c7c4ff',
-              300: '#a5a0ff',
-              400: '#8578ff',
-              500: '#6c52ff',
-              600: '#5c30f5',
-              700: '#4f22e1',
-              800: '#411cbd',
-              900: '#371a9a',
-              950: '#1f0e5e',
+              50: '#eef2ff',
+              100: '#e0e7ff',
+              200: '#c7d2fe',
+              300: '#a5b4fc',
+              400: '#818cf8',
+              500: '#6366f1',
+              600: '#4f46e5',
+              700: '#4338ca',
+              800: '#3730a3',
+              900: '#312e81',
+              950: '#1e1b4b',
+            },
+            warm: {
+              50: '#fffbeb',
+              100: '#fef3c7',
+              200: '#fde68a',
+              300: '#fcd34d',
+              400: '#fbbf24',
+              500: '#d4a574',
+              600: '#b8860b',
+              700: '#92400e',
+            },
+            surface: {
+              light: '#FAFAF8',
+              dark: '#0f0f14',
+              card: '#FFFFFF',
+              'card-dark': '#1a1a24',
             }
           },
           animation: {
-            'float': 'float 6s ease-in-out infinite',
             'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
             'slide-up': 'slideUp 0.5s ease-out',
             'fade-in': 'fadeIn 0.4s ease-out',
-            'shimmer': 'shimmer 2s linear infinite',
           },
           keyframes: {
-            float: {
-              '0%, 100%': { transform: 'translateY(0px)' },
-              '50%': { transform: 'translateY(-10px)' },
-            },
             pulseSoft: {
               '0%, 100%': { opacity: 1 },
               '50%': { opacity: 0.6 },
@@ -56,14 +66,7 @@
               '0%': { opacity: 0 },
               '100%': { opacity: 1 },
             },
-            shimmer: {
-              '0%': { backgroundPosition: '-200% 0' },
-              '100%': { backgroundPosition: '200% 0' },
-            },
           },
-          backdropBlur: {
-            xs: '2px',
-          }
         }
       }
     }
@@ -72,15 +75,11 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
   <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
 
   <!-- Lucide Icons -->
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
-
-  <!-- AOS - Animate On Scroll -->
-  <link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
-  <script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
 
   <!-- Export Libraries -->
   <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
@@ -89,16 +88,7 @@
   <!-- App CSS -->
   <link rel="stylesheet" href="css/style.css">
 </head>
-<body class="bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-500 min-h-screen">
-
-  <!-- ════════════════════════════════════════════ -->
-  <!-- AMBIENT BACKGROUND                           -->
-  <!-- ════════════════════════════════════════════ -->
-  <div class="fixed inset-0 -z-10 overflow-hidden pointer-events-none" aria-hidden="true">
-    <div class="ambient-orb ambient-orb-1"></div>
-    <div class="ambient-orb ambient-orb-2"></div>
-    <div class="ambient-orb ambient-orb-3"></div>
-  </div>
+<body class="bg-[#FAFAF8] dark:bg-[#0f0f14] text-gray-900 dark:text-gray-100 min-h-screen">
 
   <!-- ════════════════════════════════════════════ -->
   <!-- NAVIGATION BAR                               -->
@@ -204,17 +194,17 @@
   <!-- ════════════════════════════════════════════ -->
   <!-- MAIN CONTENT                                 -->
   <!-- ════════════════════════════════════════════ -->
-  <main class="max-w-3xl mx-auto px-4 sm:px-6 pt-12 pb-24">
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 pt-8 sm:pt-12 pb-16 sm:pb-24">
 
     <!-- HERO / INPUT SECTION -->
-    <section class="text-center mb-10" data-aos="fade-up" data-aos-duration="800">
-      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-200/60 dark:border-brand-700/40 text-brand-700 dark:text-brand-300 text-[11px] font-semibold mb-5">
+    <section class="text-center mb-8 sm:mb-10" data-reveal>
+      <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-200/60 dark:border-brand-700/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-5">
         <i data-lucide="sparkles" class="w-3 h-3"></i>
         Gemini AI 기반 설교 분석
       </div>
       <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight leading-tight mb-4">
         YouTube 설교 영상을<br>
-        <span class="bg-gradient-to-r from-brand-600 to-violet-500 dark:from-brand-400 dark:to-violet-400 bg-clip-text text-transparent">AI로 깊이 분석</span>합니다
+        <span class="bg-gradient-to-r from-brand-600 to-brand-400 dark:from-brand-400 dark:to-brand-300 bg-clip-text text-transparent">AI로 깊이 분석</span>합니다
       </h1>
       <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed mb-8">
         설교 영상의 URL을 입력하면 AI가 영상을 직접 시청하고<br class="hidden sm:inline">
@@ -222,7 +212,7 @@
       </p>
 
       <!-- Input Card -->
-      <div class="glass-card p-4 sm:p-5 mx-auto max-w-2xl" data-aos="fade-up" data-aos-delay="200">
+      <div class="glass-card p-4 sm:p-5 mx-auto max-w-2xl" data-reveal>
         <div class="flex flex-col sm:flex-row gap-3">
           <div class="flex-1 relative group">
             <div class="absolute left-3.5 top-1/2 -translate-y-1/2 flex items-center justify-center">
@@ -257,7 +247,7 @@
     </section>
 
     <!-- VIDEO PREVIEW (hidden) -->
-    <section id="videoPreview" class="mb-6 hidden" data-aos="fade-up">
+    <section id="videoPreview" class="mb-6 hidden" data-reveal>
       <div class="glass-card p-3 flex flex-col sm:flex-row gap-4 items-center">
         <div class="relative w-full sm:w-48 flex-shrink-0 aspect-video rounded-lg overflow-hidden bg-gray-100 dark:bg-gray-800">
           <img id="videoThumbnail" src="" alt="Video thumbnail" class="w-full h-full object-cover">
@@ -276,7 +266,7 @@
 
     <!-- PROGRESS SECTION (hidden) -->
     <section id="progressSection" class="mb-6 hidden">
-      <div class="glass-card p-5 sm:p-6" data-aos="fade-up">
+      <div class="glass-card p-5 sm:p-6" data-reveal>
         <div class="flex items-center gap-2 mb-5">
           <div class="w-6 h-6 rounded-md bg-brand-500/10 flex items-center justify-center">
             <i data-lucide="loader-2" class="w-3.5 h-3.5 text-brand-600 dark:text-brand-400 animate-spin"></i>
@@ -326,7 +316,7 @@
 
     <!-- ERROR SECTION (hidden) -->
     <section id="errorSection" class="mb-6 hidden">
-      <div class="glass-card p-8 text-center" data-aos="fade-up">
+      <div class="glass-card p-8 text-center" data-reveal>
         <div class="w-14 h-14 rounded-2xl bg-red-50 dark:bg-red-900/20 flex items-center justify-center mx-auto mb-4">
           <i data-lucide="alert-triangle" class="w-7 h-7 text-red-500"></i>
         </div>
@@ -344,7 +334,7 @@
     <section id="resultSection" class="hidden">
 
       <!-- Export Toolbar -->
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-5 p-3 rounded-2xl glass-card" data-aos="fade-up">
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5 p-3 rounded-2xl glass-card" data-reveal>
         <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
           <i data-lucide="download" class="w-4 h-4"></i>
           내보내기
@@ -369,11 +359,11 @@
       <div id="resultContent" class="space-y-5">
 
         <!-- Sermon Info Card -->
-        <div class="sermon-info-card" id="sermonInfoCard" data-aos="fade-up">
+        <div class="sermon-info-card" id="sermonInfoCard" data-reveal>
           <div class="flex flex-wrap items-center gap-2 mb-3">
             <span id="sermonType" class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-brand-500 text-white text-[11px] font-bold shadow-sm">주일예배</span>
           </div>
-          <h2 class="font-serif text-xl sm:text-2xl font-black leading-tight mb-4" id="sermonTitle">설교 제목</h2>
+          <h2 class="font-serif text-[22px] sm:text-[26px] font-black leading-tight mb-4" id="sermonTitle">설교 제목</h2>
           <div class="flex flex-wrap gap-x-5 gap-y-2 mb-4">
             <div class="meta-item">
               <i data-lucide="calendar-days" class="w-3.5 h-3.5"></i>
@@ -392,25 +382,25 @@
         </div>
 
         <!-- 1) Summary -->
-        <div class="result-block" data-aos="fade-up" data-aos-delay="100">
+        <div class="result-block" data-reveal>
           <div class="block-header block-header-summary">
-            <div class="block-icon bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400">
+            <div class="block-icon">
               <i data-lucide="bookmark" class="w-4 h-4"></i>
             </div>
-            <h3 class="text-sm font-bold">설교 전체 요약</h3>
+            <h3 class="text-[15px] font-bold">설교 전체 요약</h3>
           </div>
           <div class="block-body">
-            <div id="summaryText" class="summary-text font-serif text-base leading-[1.9] text-gray-700 dark:text-gray-300"></div>
+            <div id="summaryText" class="summary-text"></div>
           </div>
         </div>
 
         <!-- 2) Content Sections -->
-        <div class="result-block" data-aos="fade-up" data-aos-delay="200">
+        <div class="result-block" data-reveal>
           <div class="block-header block-header-content">
-            <div class="block-icon bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-400">
+            <div class="block-icon">
               <i data-lucide="list-ordered" class="w-4 h-4"></i>
             </div>
-            <h3 class="text-sm font-bold">내용 정리</h3>
+            <h3 class="text-[15px] font-bold">내용 정리</h3>
           </div>
           <div class="block-body" id="contentSections">
             <!-- Dynamically generated -->
@@ -418,12 +408,12 @@
         </div>
 
         <!-- 3) Conclusion & Meditation -->
-        <div class="result-block" data-aos="fade-up" data-aos-delay="300">
+        <div class="result-block" data-reveal>
           <div class="block-header block-header-meditation">
-            <div class="block-icon bg-rose-100 dark:bg-rose-900/30 text-rose-600 dark:text-rose-400">
+            <div class="block-icon">
               <i data-lucide="heart-handshake" class="w-4 h-4"></i>
             </div>
-            <h3 class="text-sm font-bold">결론 및 묵상</h3>
+            <h3 class="text-[15px] font-bold">결론 및 묵상</h3>
           </div>
           <div class="block-body space-y-5">
             <div id="conclusionText" class="conclusion-text"></div>
@@ -454,16 +444,10 @@
   <script src="js/renderer.js"></script>
   <script src="js/app.js"></script>
 
-  <!-- Init AOS & Lucide -->
+  <!-- Init Lucide -->
   <script>
     document.addEventListener('DOMContentLoaded', () => {
       lucide.createIcons();
-      AOS.init({
-        once: true,
-        offset: 50,
-        duration: 600,
-        easing: 'ease-out-cubic',
-      });
     });
   </script>
 </body>

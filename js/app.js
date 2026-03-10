@@ -27,6 +27,7 @@
     setupAnalyze();
     setupExportButtons();
     updateApiStatus();
+    setupScrollReveal();
   }
 
   // ═══════════════════════════════════════
@@ -238,7 +239,7 @@
       Renderer.render(analysisResult);
       showSection('resultSection');
 
-      if (typeof AOS !== 'undefined') AOS.refresh();
+      setupScrollReveal();
       showToast('success', '설교 분석이 완료되었습니다!');
 
     } catch (error) {
@@ -395,6 +396,21 @@
       toast.style.transition = 'all 0.3s ease';
       setTimeout(() => toast.remove(), 300);
     }, 3000);
+  }
+
+  // ─── Scroll Reveal (AOS 대체) ───
+  function setupScrollReveal() {
+    const els = document.querySelectorAll('[data-reveal]:not(.visible)');
+    if (!els.length) return;
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
+    els.forEach(el => observer.observe(el));
   }
 
   function sleep(ms) {
