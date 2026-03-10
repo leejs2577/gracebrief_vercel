@@ -276,47 +276,6 @@ const Renderer = (() => {
     return md;
   }
 
-  async function exportPdf(data) {
-    const element = document.getElementById('resultContent');
-    if (!element) return;
-
-    const filename = `${data.meta.date || 'sermon'}_${data.meta.title || '설교분석'}.pdf`
-      .replace(/[/\\?%*:|"<>]/g, '_');
-
-    document.body.classList.add('export-mode');
-
-    const options = {
-      margin: [8, 10, 8, 10],
-      filename: filename,
-      image: { type: 'jpeg', quality: 0.98 },
-      html2canvas: {
-        scale: 2,
-        useCORS: true,
-        allowTaint: true,
-        logging: false,
-        backgroundColor: '#FFFFFF',
-        // 뷰포트를 데스크탑 너비로 고정 → Tailwind 반응형 클래스 올바로 적용
-        windowWidth: 1200,
-        windowHeight: element.scrollHeight,
-        // 스크롤 오프셋 제거
-        scrollX: 0,
-        scrollY: -window.scrollY
-      },
-      jsPDF: {
-        unit: 'mm',
-        format: 'a4',
-        orientation: 'portrait'
-      },
-      pagebreak: { mode: ['css', 'legacy'] }
-    };
-
-    try {
-      await html2pdf().set(options).from(element).save();
-    } finally {
-      document.body.classList.remove('export-mode');
-    }
-  }
-
   async function exportImage(data) {
     const element = document.getElementById('resultContent');
     if (!element) return;
@@ -472,8 +431,7 @@ const Renderer = (() => {
   return {
     render,
     exportMarkdown,
-    exportPdf,
-    exportImage,
+exportImage,
     exportHtml,
     generateMarkdown
   };

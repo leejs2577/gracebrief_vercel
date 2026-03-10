@@ -784,10 +784,6 @@ body::before {
   }
 }
 
-/* ═══════════════════════════════════════
-   PDF EXPORT (Print only — image export는 화면 그대로 캡처)
-   ═══════════════════════════════════════ */
-
 /* ─── Progress Bar Shimmer ─── */
 #progressBar {
   position: relative;

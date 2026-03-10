@@ -278,24 +278,7 @@
       showToast('success', 'Markdown 파일이 다운로드됩니다.');
     });
 
-    $('#btnExportPdf').addEventListener('click', async () => {
-      if (!currentData) return;
-      const btn = $('#btnExportPdf');
-      btn.classList.add('loading');
-      btn.innerHTML = '<span class="spinner"></span> 생성 중...';
-      try {
-        await Renderer.exportPdf(currentData);
-        showToast('success', 'PDF 파일이 다운로드됩니다.');
-      } catch (e) {
-        showToast('error', 'PDF 생성에 실패했습니다.');
-      } finally {
-        btn.classList.remove('loading');
-        btn.innerHTML = '<i data-lucide="file-down" class="w-3.5 h-3.5"></i> PDF';
-        if (typeof lucide !== 'undefined') lucide.createIcons();
-      }
-    });
-
-    $('#btnExportImage').addEventListener('click', async () => {
+$('#btnExportImage').addEventListener('click', async () => {
       if (!currentData) return;
       const btn = $('#btnExportImage');
       btn.classList.add('loading');
