@@ -127,7 +127,7 @@
     if (ApiConfig.isConfigured()) {
       const model = ApiConfig.getModel();
       statusDot.className = 'status-dot status-active';
-      statusText.innerHTML = `<strong class="text-gray-600 dark:text-gray-300">Gemini</strong> <span class="text-gray-400">(${model})</span> 연결됨`;
+      statusText.innerHTML = `<span class="text-gray-600 dark:text-gray-300">API 연결됨</span>`;
     } else {
       statusDot.className = 'status-dot status-inactive';
       statusText.innerHTML = 'Gemini API 키가 설정되지 않았습니다. 상단의 <strong class="text-gray-500 dark:text-gray-400">API 설정</strong>을 먼저 완료해주세요.';
