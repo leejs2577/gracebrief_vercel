@@ -62,7 +62,8 @@
     const modal = $('#favoritesModal');
 
     $('#btnFavorites').addEventListener('click', () => {
-      const saved = JSON.parse(localStorage.getItem('sermon_favorites') || '{}');
+      const stored = localStorage.getItem('sermon_favorites');
+      const saved = stored ? JSON.parse(stored) : DEFAULT_FAVORITES;
       $('#fav1Url').value = saved.fav1 || '';
       $('#fav2Url').value = saved.fav2 || '';
       modal.classList.remove('hidden');
@@ -87,8 +88,14 @@
     });
   }
 
+  const DEFAULT_FAVORITES = {
+    fav1: 'https://www.youtube.com/@양산중앙교회-t6k',
+    fav2: ''
+  };
+
   async function loadRecentVideos() {
-    const saved = JSON.parse(localStorage.getItem('sermon_favorites') || '{}');
+    const stored = localStorage.getItem('sermon_favorites');
+    const saved = stored ? JSON.parse(stored) : DEFAULT_FAVORITES;
     const urls = [saved.fav1, saved.fav2].filter(Boolean);
 
     if (urls.length === 0) {
