@@ -26,7 +26,38 @@
     setupUrlInput();
     setupAnalyze();
     setupExportButtons();
+    setupHomeButton();
     loadRecentVideos();
+  }
+
+  // ═══════════════════════════════════════
+  // HOME BUTTON
+  // ═══════════════════════════════════════
+  function setupHomeButton() {
+    $('#btnHome').addEventListener('click', (e) => {
+      e.preventDefault();
+      if (isAnalyzing) return;
+
+      // 상태 초기화
+      currentData = null;
+      currentVideoInfo = null;
+
+      // 입력창 비우기
+      const input = $('#youtubeUrl');
+      input.value = '';
+      $('#btnClearUrl').classList.add('hidden');
+
+      // 섹션 초기화
+      hideSection('videoPreview');
+      hideSection('progressSection');
+      hideSection('resultSection');
+      hideSection('errorSection');
+
+      // 최근 영상 섹션 복구
+      loadRecentVideos();
+
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
   }
 
   // ═══════════════════════════════════════
