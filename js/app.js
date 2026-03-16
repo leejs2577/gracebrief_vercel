@@ -117,8 +117,8 @@
       // 1채널: 카드 3개를 가로 나열, 2채널: 세로 스택
       col.className = urls.length === 2
         ? 'flex flex-col gap-3'
-        : 'grid grid-cols-1 sm:grid-cols-3 gap-3';
-      col.innerHTML = [0,1,2].map(() =>
+        : 'grid grid-cols-1 sm:grid-cols-5 gap-3';
+      col.innerHTML = [0,1,2,3,4].map(() =>
         `<div class="rounded-xl bg-gray-100 dark:bg-gray-800/50 animate-pulse" style="height:90px"></div>`
       ).join('');
       grid.appendChild(col);

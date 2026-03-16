@@ -42,9 +42,11 @@ exports.handler = async (event) => {
     }
     const xml = await rssRes.text();
 
-    // 최근 3개 항목 파싱
+    // 라이브 영상 제외 키워드
+    const LIVE_KEYWORDS = ['라이브', 'LIVE', 'Live', '실시간', '🔴', '스트리밍', 'streaming', 'Streaming'];
+
+    // 최근 3개 항목 파싱 (라이브 제외)
     const videos = [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)]
-      .slice(0, 3)
       .map(m => {
         const entry = m[1];
         const videoId = entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] || '';
@@ -63,7 +65,9 @@ exports.handler = async (event) => {
           url: `https://www.youtube.com/watch?v=${videoId}`,
           thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
         };
-      });
+      })
+      .filter(v => !LIVE_KEYWORDS.some(kw => v.title.includes(kw)))
+      .slice(0, 5);
 
     // 피드 최상위 <title> 태그에서 채널명 추출
     const channelName = xml.match(/<title>([^<]+)<\/title>/)?.[1] || '';
