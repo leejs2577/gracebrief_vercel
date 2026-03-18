@@ -4,6 +4,21 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>말씀을삶으로 — 설교 요약 도우미</title>
+
+  <!-- 카카오톡 인앱 브라우저 → 외부 브라우저 자동 전환 -->
+  <script>
+  (function() {
+    var ua = navigator.userAgent;
+    if (!/KAKAOTALK/i.test(ua)) return;
+    var url = location.href;
+    if (/iPhone|iPad|iPod/i.test(ua)) {
+      location.href = 'kakaotalk://web/openExternal?url=' + encodeURIComponent(url);
+    } else {
+      location.href = 'intent://' + url.replace(/https?:\/\//i, '')
+        + '#Intent;scheme=https;package=com.android.chrome;end';
+    }
+  })();
+  </script>
   <meta name="description" content="설교 URL을 입력하면 핵심 요약으로 말씀의 이해와 묵상을 돕습니다.">
 
   <!-- Tailwind CSS -->
