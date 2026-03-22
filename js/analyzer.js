@@ -8,39 +8,30 @@
 
 const Analyzer = (() => {
 
-  // ─── 교회-설교자 매핑 (하드코딩) ───
-  const CHURCH_PREACHER_MAP = {
-    '양산중앙교회': '정지훈 목사'
-  };
+  // ─── 교회-설교자 매핑 ───
+  const CHURCH_PREACHER_MAP = [
+    { church: '양산중앙교회', preacher: '정지훈 목사', aliases: ['양산중앙'] }
+  ];
 
   /**
    * 전체 분석 실행
    */
   async function analyze(videoInfo) {
-    // 메타데이터에서 교회명·설교자를 사전 판단
-    const preResolved = resolveChurchAndPreacher(videoInfo);
-
-    const prompt = buildPrompt(videoInfo, preResolved, videoInfo.publishedAt);
-
-    const options = {
-      youtubeUrl: videoInfo.url
+    // 확정 메타데이터를 한 곳에서 수집
+    const confirmedMeta = {
+      date: videoInfo.publishedAt || '',
+      url: videoInfo.url,
+      ...resolveChurchAndPreacher(videoInfo)
     };
 
-    const responseText = await LLMProvider.generate(prompt, options);
+    const prompt = buildPrompt(videoInfo, confirmedMeta);
+    const responseText = await LLMProvider.generate(prompt, { youtubeUrl: videoInfo.url });
     const result = parseResponse(responseText);
 
-    // 사전 판단된 교회명·설교자가 있으면 강제 덮어쓰기
-    if (preResolved.church) {
-      result.meta.church = preResolved.church;
-    }
-    if (preResolved.preacher) {
-      result.meta.preacher = preResolved.preacher;
-    }
-
-    // YouTube 발행 날짜를 항상 우선 적용
-    if (videoInfo.publishedAt) {
-      result.meta.date = videoInfo.publishedAt;
-    }
+    // 확정 메타 한 번만 병합 (빈 문자열이면 Gemini 결과 유지)
+    Object.entries(confirmedMeta).forEach(([key, val]) => {
+      if (val) result.meta[key] = val;
+    });
 
     return result;
   }
@@ -52,11 +43,11 @@ const Analyzer = (() => {
     const resolved = { church: '', preacher: '' };
     const searchText = `${videoInfo.title || ''} ${videoInfo.channel || ''}`.toLowerCase();
 
-    // 매핑 테이블에서 교회명 매칭
-    for (const [churchName, preacherName] of Object.entries(CHURCH_PREACHER_MAP)) {
-      if (searchText.includes(churchName.toLowerCase()) || searchText.includes(churchName.replace(/교회$/, ''))) {
-        resolved.church = churchName;
-        resolved.preacher = preacherName;
+    for (const entry of CHURCH_PREACHER_MAP) {
+      const keywords = [entry.church, ...(entry.aliases || [])];
+      if (keywords.some(kw => searchText.includes(kw.toLowerCase()))) {
+        resolved.church = entry.church;
+        resolved.preacher = entry.preacher;
         break;
       }
     }
@@ -67,16 +58,14 @@ const Analyzer = (() => {
   /**
    * 프롬프트 생성
    */
-  function buildPrompt(videoInfo, preResolved, publishedAt) {
-    // 교회·설교자 판단 지침을 동적으로 생성
+  function buildPrompt(videoInfo, confirmedMeta) {
+    // 확정되지 않은 메타만 Gemini에게 판단 요청
+    const needChurch = !confirmedMeta.church;
+    const needPreacher = !confirmedMeta.preacher;
+    const needDate = !confirmedMeta.date;
+
     let metaInstruction = '';
-    if (preResolved.church && preResolved.preacher) {
-      metaInstruction = `
-【교회명·설교자 — 확정 정보】
-- 교회명: "${preResolved.church}"
-- 설교자: "${preResolved.preacher}"
-위 정보는 확정된 값입니다. meta.church와 meta.preacher에 반드시 위 값을 그대로 사용하세요.`;
-    } else {
+    if (needChurch || needPreacher) {
       metaInstruction = `
 【교회명·설교자 판단 지침】
 - 영상 내 타이틀·자막·인트로·엔딩에서 교회명과 설교자명을 확인하세요.
@@ -84,6 +73,16 @@ const Analyzer = (() => {
 - 설교자명을 확인할 수 없으면 meta.preacher를 빈 문자열("")로 두세요. 절대 추측하지 마세요.
 - 교회명을 확인할 수 없으면 meta.church를 빈 문자열("")로 두세요. 절대 추측하지 마세요.`;
     }
+
+    // 확정 필드는 스키마에서 제외하고, 미확정 필드만 Gemini에 요청
+    const metaSchemaFields = [];
+    if (needDate) metaSchemaFields.push('    "date": "설교 날짜 (YYYY-MM-DD 형식)"');
+    if (needPreacher) metaSchemaFields.push('    "preacher": "설교자 이름 (확인 불가 시 빈 문자열. 절대 추측 금지)"');
+    if (needChurch) metaSchemaFields.push('    "church": "교회명 (확인 불가 시 빈 문자열. 절대 추측 금지)"');
+    metaSchemaFields.push('    "scripture": "성경 본문 (예: 누가복음 5:17-26)"');
+    metaSchemaFields.push('    "title": "설교 제목"');
+    metaSchemaFields.push('    "worshipType": "예배 종류 (주일예배, 수요예배, 새벽예배, 금요기도회, 사경회 등)"');
+    metaSchemaFields.push('    "tags": ["태그1", "태그2", "태그3", "태그4", "태그5"]');
 
     return `당신은 한국 개신교 설교를 깊이 이해하고, 핵심을 정리하여 성도에게 전달하는 전문가입니다.
 
@@ -94,8 +93,6 @@ const Analyzer = (() => {
 ═══════════════════════════════════
 - 영상 제목: ${videoInfo.title || '(알 수 없음)'}
 - 채널명: ${videoInfo.channel || '(알 수 없음)'}
-- URL: ${videoInfo.url || ''}
-${publishedAt ? `- 영상 발행 날짜: ${publishedAt} (이 날짜를 meta.date에 사용하세요)` : ''}
 ${metaInstruction}
 
 ═══════════════════════════════════
@@ -130,13 +127,7 @@ ${metaInstruction}
 
 {
   "meta": {
-    "date": "설교 날짜 (YYYY-MM-DD 형식)",
-    "preacher": "설교자 이름 (확인 불가 시 빈 문자열. 절대 추측 금지)",
-    "church": "교회명 (확인 불가 시 빈 문자열. 절대 추측 금지)",
-    "scripture": "성경 본문 (예: 누가복음 5:17-26)",
-    "title": "설교 제목",
-    "worshipType": "예배 종류 (주일예배, 수요예배, 새벽예배, 금요기도회, 사경회 등)",
-    "tags": ["태그1", "태그2", "태그3", "태그4", "태그5"]
+${metaSchemaFields.join(',\n')}
   },
   "summary": "설교 핵심을 3~5문장으로 설명체(~합니다/~입니다)로 작성. **bold**와 ==하이라이트== 포함.",
   "sections": [
@@ -230,7 +221,8 @@ ${metaInstruction}
         scripture: data.meta?.scripture || '',
         title: data.meta?.title || '설교 제목',
         worshipType: data.meta?.worshipType || '예배',
-        tags: Array.isArray(data.meta?.tags) ? data.meta.tags : []
+        tags: Array.isArray(data.meta?.tags) ? data.meta.tags : [],
+        url: data.meta?.url || ''
       },
       summary: data.summary || '',
       sections: [],

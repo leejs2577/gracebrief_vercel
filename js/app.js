@@ -10,7 +10,6 @@
 
   // ─── State ───
   let currentData = null;
-  let currentVideoInfo = null;
   let isAnalyzing = false;
 
   // ─── DOM Helpers ───
@@ -40,7 +39,6 @@
 
       // 상태 초기화
       currentData = null;
-      currentVideoInfo = null;
 
       // 입력창 비우기
       const input = $('#youtubeUrl');
@@ -269,7 +267,6 @@
 
     isAnalyzing = true;
     currentData = null;
-    currentVideoInfo = null;
 
     hideSection('videoPreview');
     hideSection('resultSection');
@@ -288,7 +285,6 @@
       updateProgressBar(15);
 
       const videoInfo = await YouTube.fetchVideoInfo(videoId);
-      currentVideoInfo = videoInfo;
 
       showVideoPreview(videoInfo);
       updateStep('step1', 'done', '완료');
@@ -349,7 +345,7 @@
   function setupExportButtons() {
     $('#btnExportMd').addEventListener('click', () => {
       if (!currentData) return;
-      Renderer.exportMarkdown(currentData, currentVideoInfo);
+      Renderer.exportMarkdown(currentData);
       showToast('success', 'Markdown 파일이 다운로드됩니다.');
     });
 

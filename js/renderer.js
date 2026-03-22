@@ -192,14 +192,14 @@ const Renderer = (() => {
   // EXPORT FUNCTIONS
   // ═══════════════════════════════════════
 
-  function exportMarkdown(data, videoInfo) {
-    const md = generateMarkdown(data, videoInfo);
+  function exportMarkdown(data) {
+    const md = generateMarkdown(data);
     const filename = `${data.meta.date || 'sermon'}_${data.meta.title || '설교분석'}.md`
       .replace(/[/\\?%*:|"<>]/g, '_');
     downloadFile(md, filename, 'text/markdown;charset=utf-8');
   }
 
-  function generateMarkdown(data, videoInfo) {
+  function generateMarkdown(data) {
     let md = '';
 
     // Frontmatter
@@ -213,7 +213,7 @@ const Renderer = (() => {
     (data.meta.tags || []).forEach(tag => {
       md += `  - ${tag}\n`;
     });
-    md += `source: ${videoInfo?.url || ''}\n`;
+    md += `source: ${data.meta.url || ''}\n`;
     md += '---\n\n';
 
     // Title

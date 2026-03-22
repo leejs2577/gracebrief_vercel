@@ -17,14 +17,13 @@ YouTube 설교 영상을 Gemini AI가 직접 시청·분석하여 요약, 내용
 
 모든 JS 모듈은 IIFE 패턴(`const Module = (() => { ... })()`)으로 전역 객체를 노출하며, `index.html`에서 순서대로 로드된다:
 
-1. **`api-config.js`** (`ApiConfig`) — LocalStorage 기반 Gemini API 키·모델 관리
-2. **`youtube.js`** (`YouTube`) — URL에서 videoId 추출 + oEmbed API로 메타정보 조회
-3. **`llm-provider.js`** (`LLMProvider`) — Gemini API 호출. YouTube URL을 `fileData`로 전달하여 영상 직접 분석
-4. **`analyzer.js`** (`Analyzer`) — 설교 분석 프롬프트 생성 + JSON 응답 파싱. 교회-설교자 매핑(`CHURCH_PREACHER_MAP`) 하드코딩
-5. **`renderer.js`** (`Renderer`) — 분석 결과 DOM 렌더링 + 내보내기(MD / 이미지PNG / HTML)
-6. **`app.js`** — 메인 컨트롤러. 테마, 모달, URL 입력, 분석 워크플로우, 내보내기 버튼 바인딩
+1. **`youtube.js`** (`YouTube`) — URL에서 videoId 추출 + oEmbed API로 메타정보 조회
+2. **`llm-provider.js`** (`LLMProvider`) — Gemini API 호출. YouTube URL을 `fileData`로 전달하여 영상 직접 분석
+3. **`analyzer.js`** (`Analyzer`) — 설교 분석 프롬프트 생성 + JSON 응답 파싱. 교회-설교자 매핑(`CHURCH_PREACHER_MAP`)
+4. **`renderer.js`** (`Renderer`) — 분석 결과 DOM 렌더링 + 내보내기(MD / HTML)
+5. **`app.js`** — 메인 컨트롤러. 테마, 모달, URL 입력, 분석 워크플로우, 내보내기 버튼 바인딩
 
-**의존 관계**: `app.js` → `Analyzer` → `LLMProvider` → `ApiConfig`, `app.js` → `YouTube`, `app.js` → `Renderer`
+**의존 관계**: `app.js` → `Analyzer` → `LLMProvider`, `app.js` → `YouTube`, `app.js` → `Renderer`
 
 ## 주요 규칙
 
