@@ -5,6 +5,10 @@
 [build.environment]
   NODE_VERSION = "20"
 
+[[edge_functions]]
+  path = "/api/gemini"
+  function = "gemini"
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"

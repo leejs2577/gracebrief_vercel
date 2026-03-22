@@ -18,8 +18,9 @@ exports.handler = async (event) => {
   try {
     const res = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
       headers: {
-        'User-Agent': 'Mozilla/5.0 (compatible; SermonAnalyzer/1.0)',
-        'Accept-Language': 'ko-KR,ko;q=0.9,en;q=0.8',
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
       },
     });
 
@@ -27,16 +28,29 @@ exports.handler = async (event) => {
 
     const html = await res.text();
 
-    // 방법 1: JSON-LD schema.org (가장 신뢰도 높음)
-    const ldMatch = html.match(/"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})/);
-    if (ldMatch) {
-      return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: ldMatch[1] }) };
+    // YYYY-MM-DD 직접 매칭 패턴 (우선순위 순)
+    const directPatterns = [
+      /"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})/,
+      /"publishDate"\s*:\s*"(\d{4}-\d{2}-\d{2})/,
+      /"uploadDate"\s*:\s*"(\d{4}-\d{2}-\d{2})/,
+      /itemprop="datePublished"\s+content="(\d{4}-\d{2}-\d{2})/,
+      /itemprop="uploadDate"\s+content="(\d{4}-\d{2}-\d{2})/,
+    ];
+
+    for (const pattern of directPatterns) {
+      const match = html.match(pattern);
+      if (match) {
+        return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: match[1] }) };
+      }
     }
 
-    // 방법 2: ytInitialData publishDate (ISO 8601 전체 형식 포함)
-    const pdMatch = html.match(/"publishDate"\s*:\s*"(\d{4}-\d{2}-\d{2})/);
-    if (pdMatch) {
-      return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: pdMatch[1] }) };
+    // 한국어 날짜 텍스트 ("2024. 3. 17." 등) → YYYY-MM-DD 변환
+    const koMatch = html.match(/"publishDate":\{"simpleText":"([^"]+)"/);
+    if (koMatch) {
+      const parsed = parseKoreanDate(koMatch[1]);
+      if (parsed) {
+        return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: parsed }) };
+      }
     }
 
     // 날짜를 찾지 못한 경우
@@ -46,3 +60,15 @@ exports.handler = async (event) => {
     return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: null }) };
   }
 };
+
+/**
+ * 한국어 날짜 문자열을 YYYY-MM-DD로 변환
+ * "2024. 3. 17.", "2024년 3월 17일" 등 지원
+ */
+function parseKoreanDate(text) {
+  const m = text.match(/(\d{4})\D+(\d{1,2})\D+(\d{1,2})/);
+  if (m) {
+    return `${m[1]}-${m[2].padStart(2, '0')}-${m[3].padStart(2, '0')}`;
+  }
+  return null;
+}

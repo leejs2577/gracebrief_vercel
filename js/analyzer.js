@@ -20,7 +20,7 @@ const Analyzer = (() => {
     // 메타데이터에서 교회명·설교자를 사전 판단
     const preResolved = resolveChurchAndPreacher(videoInfo);
 
-    const prompt = buildPrompt(videoInfo, preResolved);
+    const prompt = buildPrompt(videoInfo, preResolved, videoInfo.publishedAt);
 
     const options = {
       youtubeUrl: videoInfo.url
@@ -67,7 +67,7 @@ const Analyzer = (() => {
   /**
    * 프롬프트 생성
    */
-  function buildPrompt(videoInfo, preResolved) {
+  function buildPrompt(videoInfo, preResolved, publishedAt) {
     // 교회·설교자 판단 지침을 동적으로 생성
     let metaInstruction = '';
     if (preResolved.church && preResolved.preacher) {
@@ -95,6 +95,7 @@ const Analyzer = (() => {
 - 영상 제목: ${videoInfo.title || '(알 수 없음)'}
 - 채널명: ${videoInfo.channel || '(알 수 없음)'}
 - URL: ${videoInfo.url || ''}
+${publishedAt ? `- 영상 발행 날짜: ${publishedAt} (이 날짜를 meta.date에 사용하세요)` : ''}
 ${metaInstruction}
 
 ═══════════════════════════════════
@@ -129,7 +130,7 @@ ${metaInstruction}
 
 {
   "meta": {
-    "date": "설교 날짜 (YYYY-MM-DD 형식). 빈 문자열로 남겨도 됩니다.",
+    "date": "설교 날짜 (YYYY-MM-DD 형식)",
     "preacher": "설교자 이름 (확인 불가 시 빈 문자열. 절대 추측 금지)",
     "church": "교회명 (확인 불가 시 빈 문자열. 절대 추측 금지)",
     "scripture": "성경 본문 (예: 누가복음 5:17-26)",

@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   LLM Provider — Netlify 프록시 경유 Gemini 호출
+   LLM Provider — Netlify Edge Function 경유 Gemini 호출
    브라우저에서 /api/gemini 엔드포인트로 POST 요청
    ═══════════════════════════════════════════════════════ */
 
