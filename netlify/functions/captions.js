@@ -1,9 +1,13 @@
 /* ═══════════════════════════════════════════════════════
    captions — YouTube 영상 자막 추출
-   YouTube watch 페이지에서 captionTracks를 파싱하고
-   timedtext API로 자막 텍스트 반환
+   ANDROID Innertube Player API로 captionTracks 조회 후
+   서명된 baseUrl로 timedtext XML 호출하여 자막 텍스트 반환
    API 키 불필요
    ═══════════════════════════════════════════════════════ */
+
+const INNERTUBE_URL = 'https://www.youtube.com/youtubei/v1/player?prettyPrint=false';
+const ANDROID_VERSION = '20.10.38';
+const ANDROID_UA = `com.google.android.youtube/${ANDROID_VERSION} (Linux; U; Android 14)`;
 
 exports.handler = async (event) => {
   const headers = {
@@ -17,69 +21,112 @@ exports.handler = async (event) => {
   }
 
   try {
-    // 1. YouTube watch 페이지 HTML fetch
-    const res = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
+    // Innertube Player API (ANDROID 클라이언트)로 자막 트랙 조회
+    const playerRes = await fetch(INNERTUBE_URL, {
+      method: 'POST',
       headers: {
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
-        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
-        'Accept-Language': 'ko-KR,ko;q=0.9,en-US;q=0.8,en;q=0.7',
+        'Content-Type': 'application/json',
+        'User-Agent': ANDROID_UA,
       },
+      body: JSON.stringify({
+        context: {
+          client: {
+            clientName: 'ANDROID',
+            clientVersion: ANDROID_VERSION,
+          },
+        },
+        videoId: videoId,
+      }),
     });
 
-    if (!res.ok) throw new Error(`YouTube 페이지 요청 실패: ${res.status}`);
-    const html = await res.text();
-
-    // 2. captionTracks 배열 직접 추출 (전체 JSON 파싱 회피)
-    const tracksMatch = html.match(/"captionTracks":(\[.*?\]),"translationLanguages"/);
-    if (!tracksMatch) {
+    if (!playerRes.ok) {
       return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
     }
 
-    let tracks;
-    try {
-      tracks = JSON.parse(tracksMatch[1]);
-    } catch {
+    const playerData = await playerRes.json();
+    const tracks = playerData?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
+
+    if (!Array.isArray(tracks) || tracks.length === 0) {
       return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
     }
 
-    if (!tracks || tracks.length === 0) {
-      return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
-    }
+    // 한국어 자막 트랙 선택 (수동 우선, 자동생성 폴백)
+    const isKo = (t) => /^ko(-[A-Za-z]+)?$/.test(t.languageCode);
+    const isAsr = (t) => (t.kind || '').toLowerCase() === 'asr';
 
-    // 3. 한국어 자막 트랙 선택 (수동 우선, 자동생성 폴백)
-    const koManual = tracks.find(t => t.languageCode === 'ko' && t.kind !== 'asr');
-    const koAuto = tracks.find(t => t.languageCode === 'ko' && t.kind === 'asr');
+    const koManual = tracks.find(t => isKo(t) && !isAsr(t));
+    const koAuto = tracks.find(t => isKo(t) && isAsr(t));
     const selected = koManual || koAuto;
 
     if (!selected) {
       return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
     }
 
-    // 4. timedtext API 호출로 자막 XML 획득
-    const captionRes = await fetch(selected.baseUrl);
-    if (!captionRes.ok) throw new Error('자막 API 요청 실패');
-    const xml = await captionRes.text();
+    // 서명된 baseUrl로 timedtext API 호출
+    const fullText = await fetchCaptionText(selected.baseUrl);
 
-    // 5. XML에서 <text> 태그 텍스트 추출
-    const texts = [];
-    const regex = /<text[^>]*>([\s\S]*?)<\/text>/g;
-    let m;
-    while ((m = regex.exec(xml)) !== null) {
-      texts.push(decodeEntities(m[1]));
-    }
-    const fullText = texts.join(' ').replace(/\s+/g, ' ').trim();
-
-    // 자막이 너무 짧으면 불충분한 것으로 판단
-    if (fullText.length < 100) {
+    if (!fullText || fullText.length < 100) {
       return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
     }
 
     return { statusCode: 200, headers, body: JSON.stringify({ captions: fullText }) };
 
   } catch (e) {
+    console.error(`[captions] 에러:`, e.message);
     return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
   }
 };
+
+/**
+ * timedtext API에서 자막 텍스트 추출
+ * srv3(XML) 형식과 json3 형식 모두 지원
+ */
+async function fetchCaptionText(baseUrl) {
+  try {
+    const res = await fetch(baseUrl, {
+      headers: { 'User-Agent': ANDROID_UA },
+    });
+
+    if (!res.ok) return null;
+    const xml = await res.text();
+    if (!xml || xml.length === 0) return null;
+
+    // srv3 형식: <p t="ms" d="ms"><s>텍스트</s></p> 또는 <text start="" dur="">텍스트</text>
+    let texts = [];
+
+    // <p> + <s> 형식 (srv3)
+    const pRegex = /<p\s+t="\d+"\s+d="\d+"[^>]*>([\s\S]*?)<\/p>/g;
+    let m;
+    while ((m = pRegex.exec(xml)) !== null) {
+      const inner = m[1];
+      // <s> 태그 안의 텍스트 추출
+      const sTexts = [];
+      const sRegex = /<s[^>]*>([^<]*)<\/s>/g;
+      let sm;
+      while ((sm = sRegex.exec(inner)) !== null) {
+        sTexts.push(sm[1]);
+      }
+      // <s> 태그가 없으면 태그 제거 후 텍스트
+      const text = sTexts.length > 0 ? sTexts.join('') : inner.replace(/<[^>]+>/g, '');
+      const decoded = decodeEntities(text).trim();
+      if (decoded) texts.push(decoded);
+    }
+
+    // <text> 형식 (기본 XML) 폴백
+    if (texts.length === 0) {
+      const textRegex = /<text[^>]*>([\s\S]*?)<\/text>/g;
+      while ((m = textRegex.exec(xml)) !== null) {
+        const decoded = decodeEntities(m[1]).trim();
+        if (decoded) texts.push(decoded);
+      }
+    }
+
+    return texts.join(' ').replace(/\s+/g, ' ').trim();
+  } catch (e) {
+    console.error(`[captions] fetchCaptionText 에러:`, e.message);
+    return null;
+  }
+}
 
 /**
  * HTML 엔티티 디코딩
@@ -91,5 +138,8 @@ function decodeEntities(text) {
     .replace(/&gt;/g, '>')
     .replace(/&#39;/g, "'")
     .replace(/&quot;/g, '"')
+    .replace(/&apos;/g, "'")
+    .replace(/&#x([0-9a-fA-F]+);/g, (_, hex) => String.fromCodePoint(parseInt(hex, 16)))
+    .replace(/&#(\d+);/g, (_, dec) => String.fromCodePoint(parseInt(dec, 10)))
     .replace(/\\n/g, '\n');
 }
