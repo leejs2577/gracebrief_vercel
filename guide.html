@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ko" class="scroll-smooth">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -29,8 +30,11 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;700;900&display=swap"
+    rel="stylesheet">
+  <link
+    href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css"
+    rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/lucide@0.344.0/dist/umd/lucide.min.js"></script>
   <link rel="stylesheet" href="css/style.css">
 
@@ -39,56 +43,88 @@
     .guide-section {
       scroll-margin-top: 80px;
     }
+
     .step-connector {
       width: 2px;
       background: linear-gradient(to bottom, #6366f1, #a5b4fc);
       flex-shrink: 0;
     }
+
     .step-circle {
-      width: 36px; height: 36px;
+      width: 36px;
+      height: 36px;
       border-radius: 50%;
       background: linear-gradient(135deg, #4f46e5, #6366f1);
       color: white;
       font-weight: 800;
       font-size: 15px;
-      display: flex; align-items: center; justify-content: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(99,102,241,0.35);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
     }
+
     .callout {
-      display: flex; gap: 12px; align-items: flex-start;
-      padding: 14px 18px; border-radius: 12px;
-      background: rgba(99,102,241,0.05);
-      border: 1px solid rgba(99,102,241,0.15);
-      font-size: 14px; line-height: 1.7;
+      display: flex;
+      gap: 12px;
+      align-items: flex-start;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(99, 102, 241, 0.05);
+      border: 1px solid rgba(99, 102, 241, 0.15);
+      font-size: 14px;
+      line-height: 1.7;
     }
+
     .dark .callout {
-      background: rgba(99,102,241,0.08);
-      border-color: rgba(129,140,248,0.2);
+      background: rgba(99, 102, 241, 0.08);
+      border-color: rgba(129, 140, 248, 0.2);
     }
-    .callout-icon { color: #6366f1; margin-top: 1px; flex-shrink: 0; }
-    .dark .callout-icon { color: #a5b4fc; }
+
+    .callout-icon {
+      color: #6366f1;
+      margin-top: 1px;
+      flex-shrink: 0;
+    }
+
+    .dark .callout-icon {
+      color: #a5b4fc;
+    }
 
     .ui-mock {
       border-radius: 14px;
       background: #FFFFFF;
-      border: 1px solid rgba(0,0,0,0.07);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.07), 0 1px 3px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0, 0, 0, 0.07);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.07), 0 1px 3px rgba(0, 0, 0, 0.04);
       overflow: hidden;
     }
+
     .dark .ui-mock {
       background: #1a1a24;
-      border-color: rgba(255,255,255,0.07);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.3);
+      border-color: rgba(255, 255, 255, 0.07);
+      box-shadow: 0 4px 24px rgba(0, 0, 0, 0.3);
     }
+
     .ui-mock-bar {
-      display: flex; gap: 6px; align-items: center;
+      display: flex;
+      gap: 6px;
+      align-items: center;
       padding: 10px 14px;
-      background: rgba(0,0,0,0.025);
-      border-bottom: 1px solid rgba(0,0,0,0.05);
+      background: rgba(0, 0, 0, 0.025);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
     }
-    .dark .ui-mock-bar { background: rgba(255,255,255,0.03); border-bottom-color: rgba(255,255,255,0.05); }
-    .ui-mock-dot { width: 10px; height: 10px; border-radius: 50%; }
+
+    .dark .ui-mock-bar {
+      background: rgba(255, 255, 255, 0.03);
+      border-bottom-color: rgba(255, 255, 255, 0.05);
+    }
+
+    .ui-mock-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
 
     .highlight-ring {
       outline: 3px solid #6366f1;
@@ -96,848 +132,974 @@
       border-radius: 12px;
       animation: ringPulse 2s ease-in-out infinite;
     }
+
     @keyframes ringPulse {
-      0%,100% { outline-color: rgba(99,102,241,0.9); }
-      50% { outline-color: rgba(99,102,241,0.3); }
+
+      0%,
+      100% {
+        outline-color: rgba(99, 102, 241, 0.9);
+      }
+
+      50% {
+        outline-color: rgba(99, 102, 241, 0.3);
+      }
     }
 
     .arrow-label {
-      display: flex; align-items: center; gap: 8px;
-      font-size: 12px; font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 12px;
+      font-weight: 700;
       color: #6366f1;
     }
-    .dark .arrow-label { color: #a5b4fc; }
+
+    .dark .arrow-label {
+      color: #a5b4fc;
+    }
 
     .feature-card {
       padding: 24px;
       border-radius: 16px;
       background: #FFFFFF;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
       transition: transform 0.2s, box-shadow 0.2s;
     }
-    .feature-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+
+    .feature-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+    }
+
     .dark .feature-card {
       background: #1a1a24;
-      border-color: rgba(255,255,255,0.06);
+      border-color: rgba(255, 255, 255, 0.06);
     }
-    .dark .feature-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.4); }
+
+    .dark .feature-card:hover {
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
 
     .section-badge {
-      display: inline-flex; align-items: center; gap: 6px;
-      padding: 4px 12px; border-radius: 20px;
-      font-size: 12px; font-weight: 700;
-      background: rgba(99,102,241,0.08);
-      color: #4f46e5; border: 1px solid rgba(99,102,241,0.15);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      background: rgba(99, 102, 241, 0.08);
+      color: #4f46e5;
+      border: 1px solid rgba(99, 102, 241, 0.15);
       margin-bottom: 12px;
     }
-    .dark .section-badge { background: rgba(129,140,248,0.1); color: #a5b4fc; border-color: rgba(129,140,248,0.2); }
+
+    .dark .section-badge {
+      background: rgba(129, 140, 248, 0.1);
+      color: #a5b4fc;
+      border-color: rgba(129, 140, 248, 0.2);
+    }
 
     .toc-link {
-      display: flex; align-items: center; gap: 10px;
-      padding: 10px 14px; border-radius: 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 10px;
       text-decoration: none;
       color: #374151;
-      font-size: 14px; font-weight: 500;
+      font-size: 14px;
+      font-weight: 500;
       transition: background 0.15s, color 0.15s;
       border: 1px solid transparent;
     }
-    .dark .toc-link { color: #D1D5DB; }
+
+    .dark .toc-link {
+      color: #D1D5DB;
+    }
+
     .toc-link:hover {
-      background: rgba(99,102,241,0.05);
+      background: rgba(99, 102, 241, 0.05);
       color: #4f46e5;
-      border-color: rgba(99,102,241,0.12);
+      border-color: rgba(99, 102, 241, 0.12);
     }
-    .dark .toc-link:hover { background: rgba(129,140,248,0.08); color: #a5b4fc; }
+
+    .dark .toc-link:hover {
+      background: rgba(129, 140, 248, 0.08);
+      color: #a5b4fc;
+    }
+
     .toc-num {
-      width: 24px; height: 24px; border-radius: 6px; flex-shrink: 0;
-      background: rgba(99,102,241,0.08); color: #6366f1;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 11px; font-weight: 800;
+      width: 24px;
+      height: 24px;
+      border-radius: 6px;
+      flex-shrink: 0;
+      background: rgba(99, 102, 241, 0.08);
+      color: #6366f1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+      font-weight: 800;
     }
-    .dark .toc-num { background: rgba(129,140,248,0.1); color: #a5b4fc; }
+
+    .dark .toc-num {
+      background: rgba(129, 140, 248, 0.1);
+      color: #a5b4fc;
+    }
 
     .export-showcase {
-      display: flex; flex-direction: column; gap: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
+
     .export-row {
-      display: flex; align-items: center; gap: 14px;
-      padding: 14px 18px; border-radius: 12px;
-      background: rgba(0,0,0,0.02);
-      border: 1px solid rgba(0,0,0,0.05);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: rgba(0, 0, 0, 0.02);
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
-    .dark .export-row { background: rgba(255,255,255,0.03); border-color: rgba(255,255,255,0.05); }
+
+    .dark .export-row {
+      background: rgba(255, 255, 255, 0.03);
+      border-color: rgba(255, 255, 255, 0.05);
+    }
+
     .export-icon-box {
-      width: 40px; height: 40px; border-radius: 10px; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 10px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
     .result-preview-block {
-      border-radius: 12px; overflow: hidden;
-      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(0, 0, 0, 0.06);
       background: #fff;
       margin-bottom: 10px;
     }
-    .dark .result-preview-block { background: #1a1a24; border-color: rgba(255,255,255,0.06); }
-    .result-preview-header {
-      display: flex; align-items: center; gap: 10px;
-      padding: 12px 16px;
-      border-bottom: 1px solid rgba(0,0,0,0.04);
-      background: rgba(0,0,0,0.015);
+
+    .dark .result-preview-block {
+      background: #1a1a24;
+      border-color: rgba(255, 255, 255, 0.06);
     }
-    .dark .result-preview-header { background: rgba(255,255,255,0.02); border-bottom-color: rgba(255,255,255,0.04); }
-    .result-preview-body { padding: 14px 16px; }
+
+    .result-preview-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+      background: rgba(0, 0, 0, 0.015);
+    }
+
+    .dark .result-preview-header {
+      background: rgba(255, 255, 255, 0.02);
+      border-bottom-color: rgba(255, 255, 255, 0.04);
+    }
+
+    .result-preview-body {
+      padding: 14px 16px;
+    }
 
     /* 스크롤 부드럽게 */
-    html { scroll-behavior: smooth; }
+    html {
+      scroll-behavior: smooth;
+    }
   </style>
 </head>
+
 <body class="bg-[#FAFAF8] dark:bg-[#0f0f14] text-gray-900 dark:text-gray-100 min-h-screen">
 
-<!-- ══════════════════════════ NAV ══════════════════════════ -->
-<nav class="sticky top-0 z-50 glass-nav border-b border-white/10 dark:border-white/5">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-    <div class="flex items-center gap-2.5">
-      <a href="index.html" class="flex items-center gap-2.5 group">
-        <div class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/25 group-hover:shadow-brand-500/40 transition-shadow">
-          <i data-lucide="book-open" class="text-white" style="width:18px;height:18px;"></i>
-        </div>
-        <span class="text-sm font-bold tracking-tight">말씀을삶으로</span>
-      </a>
-      <span class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-[11px] font-bold border border-brand-200/50 dark:border-brand-700/40">
-        사용 가이드
-      </span>
+  <!-- ══════════════════════════ NAV ══════════════════════════ -->
+  <nav class="sticky top-0 z-50 glass-nav border-b border-white/10 dark:border-white/5">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <a href="index.html" class="flex items-center gap-2.5 group">
+          <div
+            class="w-9 h-9 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center shadow-lg shadow-brand-500/25 group-hover:shadow-brand-500/40 transition-shadow">
+            <i data-lucide="book-open" class="text-white" style="width:18px;height:18px;"></i>
+          </div>
+          <span class="text-sm font-bold tracking-tight">말씀을삶으로</span>
+        </a>
+        <span
+          class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-brand-50 dark:bg-brand-900/30 text-brand-600 dark:text-brand-400 text-[11px] font-bold border border-brand-200/50 dark:border-brand-700/40">
+          사용 가이드
+        </span>
+      </div>
+      <div class="flex items-center gap-2">
+        <a href="index.html" class="nav-btn text-xs font-semibold">
+          <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
+          <span class="hidden sm:inline">앱으로 이동</span>
+        </a>
+        <button id="btnThemeToggle" class="nav-btn" title="테마 전환">
+          <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
+        </button>
+      </div>
     </div>
-    <div class="flex items-center gap-2">
-      <a href="index.html" class="nav-btn text-xs font-semibold">
-        <i data-lucide="arrow-left" class="w-3.5 h-3.5"></i>
-        <span class="hidden sm:inline">앱으로 이동</span>
-      </a>
-      <button id="btnThemeToggle" class="nav-btn" title="테마 전환">
-        <i data-lucide="moon" id="themeIcon" class="w-4 h-4"></i>
-      </button>
+  </nav>
+
+  <main class="max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-24">
+
+    <!-- ── HERO ── -->
+    <div class="text-center mb-12">
+      <div
+        class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-200/60 dark:border-brand-700/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-5">
+        📖 사용 방법 안내
+      </div>
+      <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 leading-tight">
+        말씀을삶으로<br>
+        <span
+          class="bg-gradient-to-r from-brand-600 to-brand-400 dark:from-brand-400 dark:to-brand-300 bg-clip-text text-transparent">사용
+          가이드</span>
+      </h1>
+      <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
+        한 주일의 삶을 살아갈 때 설교말씀을 기억하고 살아내기 위한<br>
+        좋은 도구가 되면 좋겠습니다.
+      </p>
     </div>
-  </div>
-</nav>
 
-<main class="max-w-3xl mx-auto px-4 sm:px-6 pt-10 pb-24">
-
-  <!-- ── HERO ── -->
-  <div class="text-center mb-12">
-    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-brand-50 dark:bg-brand-900/30 border border-brand-200/60 dark:border-brand-700/40 text-brand-700 dark:text-brand-300 text-xs font-semibold mb-5">
-      📖 사용 방법 안내
+    <!-- ── 목차 ── -->
+    <div class="glass-card p-5 mb-10">
+      <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">목차</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
+        <a href="#section1" class="toc-link"><span class="toc-num">1</span>소개</a>
+        <a href="#section2" class="toc-link"><span class="toc-num">2</span>기본 사용법</a>
+        <a href="#section3" class="toc-link"><span class="toc-num">3</span>즐겨찾기 기능</a>
+        <a href="#section4" class="toc-link"><span class="toc-num">4</span>정리 상세 보기</a>
+        <a href="#section5" class="toc-link"><span class="toc-num">5</span>내보내기</a>
+        <a href="#section6" class="toc-link"><span class="toc-num">6</span>화면 설정</a>
+      </div>
     </div>
-    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4 leading-tight">
-      말씀을삶으로<br>
-      <span class="bg-gradient-to-r from-brand-600 to-brand-400 dark:from-brand-400 dark:to-brand-300 bg-clip-text text-transparent">사용 가이드</span>
-    </h1>
-    <p class="text-sm sm:text-base text-gray-500 dark:text-gray-400 max-w-md mx-auto leading-relaxed">
-      YouTube 설교 URL을 입력하면 요약, 내용 정리, 묵상 포인트를 바로 확인할 수 있습니다.<br>
-      아래 가이드를 따라 시작해 보세요.
-    </p>
-  </div>
 
-  <!-- ── 목차 ── -->
-  <div class="glass-card p-5 mb-10">
-    <p class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-widest mb-4">목차</p>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5">
-      <a href="#section1" class="toc-link"><span class="toc-num">1</span>서비스 소개</a>
-      <a href="#section2" class="toc-link"><span class="toc-num">2</span>기본 사용법</a>
-      <a href="#section3" class="toc-link"><span class="toc-num">3</span>즐겨찾기 기능</a>
-      <a href="#section4" class="toc-link"><span class="toc-num">4</span>분석 결과 상세 보기</a>
-      <a href="#section5" class="toc-link"><span class="toc-num">5</span>내보내기 기능</a>
-      <a href="#section6" class="toc-link"><span class="toc-num">6</span>화면 설정</a>
-    </div>
-  </div>
-
-  <!-- ════════════════════════════════════════
+    <!-- ════════════════════════════════════════
        SECTION 1 — 서비스 소개
   ════════════════════════════════════════ -->
-  <section id="section1" class="guide-section mb-16">
-    <div class="section-badge">
-      <i data-lucide="sparkles" style="width:13px;height:13px;"></i> 1. 서비스 소개
-    </div>
-    <h2 class="text-2xl font-extrabold mb-2 tracking-tight">이 서비스가 하는 일</h2>
-    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-      설교 영상 URL을 붙여넣으면 요약, 내용 정리, 묵상 포인트를 확인할 수 있습니다.
-    </p>
+    <section id="section1" class="guide-section mb-16">
+      <div class="section-badge">
+        <i data-lucide="sparkles" style="width:13px;height:13px;"></i> 1. 서비스 소개
+      </div>
+      <h2 class="text-2xl font-extrabold mb-2 tracking-tight">설교 말씀 요약</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
+        설교 영상 URL을 붙여넣으면 요약, 내용 정리, 묵상 포인트를 확인할 수 있습니다.
+      </p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
-      <div class="feature-card text-center">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-500/25">
-          <i data-lucide="brain" class="text-white" style="width:22px;height:22px;"></i>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-8">
+        <div class="feature-card text-center">
+          <div
+            class="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-brand-500/25">
+            <i data-lucide="brain" class="text-white" style="width:22px;height:22px;"></i>
+          </div>
+          <h3 class="font-bold mb-1.5">영상 분석</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">YouTube URL 하나로 설교 내용을 분석합니다</p>
         </div>
-        <h3 class="font-bold mb-1.5">영상 분석</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">YouTube URL 하나로 설교 내용을 분석합니다</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25">
-          <i data-lucide="download" class="text-white" style="width:22px;height:22px;"></i>
+        <div class="feature-card text-center">
+          <div
+            class="w-12 h-12 rounded-2xl bg-gradient-to-br from-emerald-500 to-teal-600 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-emerald-500/25">
+            <i data-lucide="download" class="text-white" style="width:22px;height:22px;"></i>
+          </div>
+          <h3 class="font-bold mb-1.5">2가지 내보내기</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Markdown · HTML 형식으로 내려받아 어디서든 활용하세요
+          </p>
         </div>
-        <h3 class="font-bold mb-1.5">3가지 내보내기</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Markdown · 이미지 · HTML 형식으로 내려받아 어디서든 활용하세요</p>
-      </div>
-      <div class="feature-card text-center">
-        <div class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-400/25">
-          <i data-lucide="bookmark" class="text-white" style="width:22px;height:22px;"></i>
+        <div class="feature-card text-center">
+          <div
+            class="w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center mx-auto mb-4 shadow-lg shadow-amber-400/25">
+            <i data-lucide="bookmark" class="text-white" style="width:22px;height:22px;"></i>
+          </div>
+          <h3 class="font-bold mb-1.5">즐겨찾기 채널</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">자주 보는 채널을 등록하면 최근 영상 5개를 첫 화면에서 바로 클릭할 수
+            있습니다</p>
         </div>
-        <h3 class="font-bold mb-1.5">즐겨찾기 채널</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">자주 보는 채널을 등록하면 최근 영상 5개를 첫 화면에서 바로 클릭할 수 있습니다</p>
       </div>
-    </div>
 
-    <!-- 분석 결과 구성 미리보기 -->
-    <div class="callout mb-0">
-      <i data-lucide="info" class="w-4 h-4 callout-icon mt-0.5"></i>
-      <div>
-        <p class="font-semibold text-sm mb-1">분석 결과로 얻을 수 있는 것</p>
-        <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
-          <li>🗓 <strong>설교 정보</strong> — 날짜, 교회, 설교자, 성경 본문, 예배 유형, 태그</li>
-          <li>📌 <strong>전체 요약</strong> — 핵심 메시지를 3~5문장으로 압축</li>
-          <li>📖 <strong>내용 정리</strong> — 소제목별 본문 + 핵심 포인트 + 성경 인용</li>
-          <li>💝 <strong>결론 및 묵상</strong> — 결론 3포인트 + 묵상 질문 4개 + 마무리 구절</li>
-        </ul>
+      <!-- 분석 결과 구성 미리보기 -->
+      <div class="callout mb-0">
+        <i data-lucide="info" class="w-4 h-4 callout-icon mt-0.5"></i>
+        <div>
+          <p class="font-semibold text-sm mb-1">분석 결과로 얻을 수 있는 것</p>
+          <ul class="text-sm text-gray-600 dark:text-gray-400 space-y-1">
+            <li>🗓 <strong>설교 정보</strong> — 날짜, 교회, 설교자, 성경 본문, 예배 유형, 태그</li>
+            <li>📌 <strong>전체 요약</strong> — 핵심 메시지를 3~5문장으로 압축</li>
+            <li>📖 <strong>내용 정리</strong> — 소제목별 본문 + 핵심 포인트 + 성경 인용</li>
+            <li>💝 <strong>결론 및 묵상</strong> — 결론 3포인트 + 묵상 질문 4개 + 마무리 구절</li>
+          </ul>
+        </div>
       </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════
+    <!-- ════════════════════════════════════════
        SECTION 2 — 기본 사용법
   ════════════════════════════════════════ -->
-  <section id="section2" class="guide-section mb-16">
-    <div class="section-badge">
-      <i data-lucide="play-circle" style="width:13px;height:13px;"></i> 2. 기본 사용법
-    </div>
-    <h2 class="text-2xl font-extrabold mb-2 tracking-tight">3단계로 분석 완료</h2>
-    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-      URL 입력 → 분석 시작 → 결과 확인. 세 단계면 충분합니다.
-    </p>
-
-    <!-- STEP 1 -->
-    <div class="flex gap-5 mb-2">
-      <div class="flex flex-col items-center gap-0">
-        <div class="step-circle">1</div>
-        <div class="step-connector flex-1 mt-2" style="min-height:220px;"></div>
+    <section id="section2" class="guide-section mb-16">
+      <div class="section-badge">
+        <i data-lucide="play-circle" style="width:13px;height:13px;"></i> 2. 기본 사용법
       </div>
-      <div class="flex-1 pb-10">
-        <p class="font-bold text-base mb-1 mt-1.5">YouTube URL을 붙여넣으세요</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-          설교 영상의 URL을 복사한 뒤 입력창에 붙여넣고 <strong>분석 시작</strong>을 클릭하거나 <kbd class="px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-mono">Enter</kbd>를 누르세요.
-        </p>
+      <h2 class="text-2xl font-extrabold mb-2 tracking-tight">3단계로 분석 완료</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
+        URL 입력 → 분석 시작 → 결과 확인. 세 단계면 충분합니다.
+      </p>
 
-        <!-- URL 입력 UI 모사 -->
-        <div class="ui-mock">
-          <div class="ui-mock-bar">
-            <div class="ui-mock-dot bg-red-400"></div>
-            <div class="ui-mock-dot bg-yellow-400"></div>
-            <div class="ui-mock-dot bg-green-400"></div>
-          </div>
-          <div class="p-5">
-            <div class="flex flex-col sm:flex-row gap-3">
-              <div class="flex-1 relative highlight-ring">
-                <div class="absolute left-3.5 top-1/2 -translate-y-1/2">
-                  <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
-                    <path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>
-                  </svg>
+      <!-- STEP 1 -->
+      <div class="flex gap-5 mb-2">
+        <div class="flex flex-col items-center gap-0">
+          <div class="step-circle">1</div>
+          <div class="step-connector flex-1 mt-2" style="min-height:220px;"></div>
+        </div>
+        <div class="flex-1 pb-10">
+          <p class="font-bold text-base mb-1 mt-1.5">YouTube URL을 붙여넣으세요</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+            설교 영상의 URL을 복사한 뒤 입력창에 붙여넣고 <strong>분석 시작</strong>을 클릭하거나 <kbd
+              class="px-1.5 py-0.5 rounded-md bg-gray-100 dark:bg-gray-800 text-xs font-mono">Enter</kbd>를 누르세요.
+          </p>
+
+          <!-- URL 입력 UI 모사 -->
+          <div class="ui-mock">
+            <div class="ui-mock-bar">
+              <div class="ui-mock-dot bg-red-400"></div>
+              <div class="ui-mock-dot bg-yellow-400"></div>
+              <div class="ui-mock-dot bg-green-400"></div>
+            </div>
+            <div class="p-5">
+              <div class="flex flex-col sm:flex-row gap-3">
+                <div class="flex-1 relative highlight-ring">
+                  <div class="absolute left-3.5 top-1/2 -translate-y-1/2">
+                    <svg class="w-5 h-5 text-red-500" viewBox="0 0 24 24" fill="currentColor">
+                      <path
+                        d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z" />
+                    </svg>
+                  </div>
+                  <input readonly value="https://www.youtube.com/watch?v=..."
+                    class="w-full pl-11 pr-3 py-3 rounded-xl border border-brand-400 bg-white dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-300 focus:outline-none"
+                    style="box-shadow:0 0 0 3px rgba(99,102,241,0.12);">
                 </div>
-                <input readonly value="https://www.youtube.com/watch?v=..." class="w-full pl-11 pr-3 py-3 rounded-xl border border-brand-400 bg-white dark:bg-gray-800 text-sm text-gray-600 dark:text-gray-300 focus:outline-none" style="box-shadow:0 0 0 3px rgba(99,102,241,0.12);">
+                <button
+                  class="btn-primary px-5 py-3 rounded-xl text-sm font-bold flex items-center gap-2 pointer-events-none">
+                  <i data-lucide="scan-search" class="w-4 h-4"></i>
+                  <span>분석 시작</span>
+                </button>
               </div>
-              <button class="btn-primary px-5 py-3 rounded-xl text-sm font-bold flex items-center gap-2 pointer-events-none">
-                <i data-lucide="scan-search" class="w-4 h-4"></i>
-                <span>분석 시작</span>
+            </div>
+          </div>
+
+          <div class="mt-4 space-y-2">
+            <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">지원하는 URL 형식</p>
+            <div class="flex flex-wrap gap-2">
+              <code
+                class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtube.com/watch?v=…</code>
+              <code
+                class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtu.be/…</code>
+              <code
+                class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtube.com/shorts/…</code>
+              <code
+                class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtube.com/live/…</code>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 2 -->
+      <div class="flex gap-5 mb-2">
+        <div class="flex flex-col items-center gap-0">
+          <div class="step-circle">2</div>
+          <div class="step-connector flex-1 mt-2" style="min-height:240px;"></div>
+        </div>
+        <div class="flex-1 pb-10">
+          <p class="font-bold text-base mb-1 mt-1.5">분석이 진행됩니다</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+            영상 길이에 따라 <strong>1~3분</strong> 정도 소요됩니다. 진행 상황을 3단계로 보여줍니다.
+          </p>
+
+          <!-- 진행 상태 UI 모사 -->
+          <div class="ui-mock p-5 space-y-3">
+            <div class="progress-step done">
+              <div class="step-icon-wrap">
+                <i data-lucide="video" class="w-4 h-4"></i>
+              </div>
+              <div class="flex-1">
+                <p class="step-title">설교 정보 추출</p>
+                <p class="step-status">완료</p>
+              </div>
+            </div>
+            <div class="progress-step done">
+              <div class="step-icon-wrap">
+                <i data-lucide="file-audio" class="w-4 h-4"></i>
+              </div>
+              <div class="flex-1">
+                <p class="step-title">설교 스크립트 정리</p>
+                <p class="step-status">완료</p>
+              </div>
+            </div>
+            <div class="progress-step active">
+              <div class="step-icon-wrap">
+                <i data-lucide="brain" class="w-4 h-4"></i>
+              </div>
+              <div class="flex-1">
+                <p class="step-title">설교 내용 분석 및 정리</p>
+                <p class="step-status">설교를 요약하고 있습니다</p>
+              </div>
+            </div>
+            <div class="flex items-center gap-3 pt-1">
+              <div class="flex-1 h-1.5 rounded-full bg-gray-200/60 dark:bg-gray-700/60 overflow-hidden">
+                <div class="h-full rounded-full bg-gradient-to-r from-brand-600 to-violet-500 transition-all"
+                  style="width:72%"></div>
+              </div>
+              <span class="text-xs font-semibold text-gray-400 w-8 text-right">72%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- STEP 3 -->
+      <div class="flex gap-5">
+        <div class="flex flex-col items-center">
+          <div class="step-circle">3</div>
+        </div>
+        <div class="flex-1 mt-1.5">
+          <p class="font-bold text-base mb-1">결과를 확인하세요</p>
+          <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
+            분석이 완료되면 결과 화면이 자동으로 표시됩니다. 스크롤하며 설교 요약과 묵상 포인트를 확인하세요.
+          </p>
+          <div class="callout">
+            <i data-lucide="check-circle-2" class="w-4 h-4 callout-icon mt-0.5" style="color:#10B981;"></i>
+            <p class="text-sm text-gray-600 dark:text-gray-400">분석 완료 후 <strong>"설교 분석이 완료되었습니다!"</strong> 알림이 화면 우하단에
+              표시됩니다.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       SECTION 3 — 즐겨찾기
+  ════════════════════════════════════════ -->
+    <section id="section3" class="guide-section mb-16">
+      <div class="section-badge">
+        <i data-lucide="bookmark" style="width:13px;height:13px;"></i> 3. 즐겨찾기 기능
+      </div>
+      <h2 class="text-2xl font-extrabold mb-2 tracking-tight">자주 보는 채널을 등록하세요</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
+        YouTube 채널 URL을 등록하면 첫 화면에서 최근 설교 5개가 자동으로 표시됩니다. 영상 카드를 클릭하면 URL이 바로 입력됩니다.
+      </p>
+
+      <!-- 네비게이션 바 위치 안내 -->
+      <div class="ui-mock mb-6">
+        <div class="ui-mock-bar">
+          <div class="ui-mock-dot bg-red-400"></div>
+          <div class="ui-mock-dot bg-yellow-400"></div>
+          <div class="ui-mock-dot bg-green-400"></div>
+        </div>
+        <div class="px-5 py-4 flex items-center justify-between">
+          <div class="flex items-center gap-2">
+            <div
+              class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+              <i data-lucide="book-open" class="text-white" style="width:14px;height:14px;"></i>
+            </div>
+            <span class="text-sm font-bold">말씀을삶으로</span>
+          </div>
+          <div class="flex items-center gap-2">
+            <!-- 즐겨찾기 버튼 강조 -->
+            <div class="relative">
+              <button class="nav-btn highlight-ring pointer-events-none flex items-center gap-1.5">
+                <i data-lucide="bookmark" class="w-4 h-4"></i>
+                <span class="text-xs font-semibold">즐겨찾기</span>
+              </button>
+              <div class="arrow-label absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
+                <i data-lucide="arrow-up" style="width:12px;height:12px;"></i> 여기를 클릭
+              </div>
+            </div>
+            <button class="nav-btn pointer-events-none flex items-center gap-1.5">
+              <i data-lucide="book-marked" class="w-4 h-4"></i>
+              <span class="text-xs font-semibold">가이드</span>
+            </button>
+            <button class="nav-btn pointer-events-none">
+              <i data-lucide="moon" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div style="height: 24px;"></div>
+
+      <!-- 모달 UI 모사 -->
+      <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">즐겨찾기 설정 화면</p>
+      <div class="ui-mock max-w-md mb-6">
+        <div class="flex items-center justify-between p-5 border-b border-gray-200/80 dark:border-gray-700/80">
+          <div class="flex items-center gap-2.5">
+            <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
+              <i data-lucide="bookmark" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
+            </div>
+            <h2 class="text-base font-bold">즐겨찾기 채널 설정</h2>
+          </div>
+          <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </div>
+        </div>
+        <div class="p-5 space-y-4">
+          <div
+            class="flex items-start gap-2.5 p-3 rounded-xl bg-brand-50 dark:bg-brand-900/20 border border-brand-200/60 dark:border-brand-800/40">
+            <i data-lucide="info" class="w-4 h-4 text-brand-600 dark:text-brand-400 mt-0.5"></i>
+            <p class="text-xs text-brand-700 dark:text-brand-300 leading-relaxed">채널 URL을 등록하면 최근 설교 5개를 첫 화면에서 바로 선택할 수
+              있습니다.</p>
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-xs font-semibold text-gray-500">채널 1</label>
+            <input readonly value="https://www.youtube.com/@양산중앙교회-t6k"
+              class="input-field text-sm text-gray-600 dark:text-gray-300" style="pointer-events:none;">
+          </div>
+          <div class="space-y-1.5">
+            <label class="text-xs font-semibold text-gray-500">채널 2 (선택)</label>
+            <input readonly placeholder="https://www.youtube.com/@channel" class="input-field text-sm"
+              style="pointer-events:none;">
+          </div>
+          <button
+            class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 text-white text-sm font-bold flex items-center justify-center gap-2 pointer-events-none shadow-lg shadow-brand-500/20">
+            <i data-lucide="check" class="w-4 h-4"></i> 저장하기
+          </button>
+        </div>
+      </div>
+
+      <!-- 최근 영상 표시 안내 -->
+      <div class="callout mb-6">
+        <i data-lucide="zap" class="w-4 h-4 callout-icon mt-0.5"></i>
+        <div class="text-sm text-gray-600 dark:text-gray-400">
+          <p class="font-semibold mb-1">채널 URL 찾는 방법</p>
+          <p>YouTube에서 채널 페이지에 들어간 뒤 주소창의 URL을 복사하세요.<br>
+            <code
+              class="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded font-mono">https://www.youtube.com/@채널핸들</code>
+            또는
+            <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded font-mono">/channel/UCxxx</code> 형식
+            모두 지원합니다.
+          </p>
+        </div>
+      </div>
+
+      <!-- 최근 영상 카드 미리보기 -->
+      <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">등록 후 첫 화면에 표시되는 최근 영상 카드</p>
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        <div class="video-card pointer-events-none">
+          <div
+            class="aspect-video rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 mb-2 flex items-center justify-center">
+            <i data-lucide="play" class="w-6 h-6 text-gray-400"></i>
+          </div>
+          <p class="video-card-title">2026년 3월 주일 설교 — 말씀과 삶</p>
+          <p class="video-card-date">Mar 15</p>
+        </div>
+        <div class="video-card pointer-events-none">
+          <div
+            class="aspect-video rounded-lg bg-gradient-to-br from-brand-100 to-brand-200 dark:from-brand-900/40 dark:to-brand-800/40 mb-2 flex items-center justify-center">
+            <i data-lucide="play" class="w-6 h-6 text-brand-400"></i>
+          </div>
+          <p class="video-card-title">은혜의 물결 — 요한복음 4장</p>
+          <p class="video-card-date">Mar 8</p>
+        </div>
+        <div class="video-card pointer-events-none sm:block hidden">
+          <div
+            class="aspect-video rounded-lg bg-gradient-to-br from-emerald-100 to-teal-200 dark:from-emerald-900/40 dark:to-teal-800/40 mb-2 flex items-center justify-center">
+            <i data-lucide="play" class="w-6 h-6 text-emerald-400"></i>
+          </div>
+          <p class="video-card-title">믿음으로 서는 삶</p>
+          <p class="video-card-date">Mar 2</p>
+        </div>
+        <div class="video-card pointer-events-none sm:block hidden">
+          <div
+            class="aspect-video rounded-lg bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/40 dark:to-orange-800/40 mb-2 flex items-center justify-center">
+            <i data-lucide="play" class="w-6 h-6 text-amber-400"></i>
+          </div>
+          <p class="video-card-title">하나님의 계획 안에서</p>
+          <p class="video-card-date">Feb 22</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-400 dark:text-gray-500 mt-3 text-center">카드를 클릭하면 URL이 입력창에 자동으로 들어갑니다</p>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       SECTION 4 — 분석 결과 상세
+  ════════════════════════════════════════ -->
+    <section id="section4" class="guide-section mb-16">
+      <div class="section-badge">
+        <i data-lucide="layout-list" style="width:13px;height:13px;"></i> 4. 분석 결과 상세 보기
+      </div>
+      <h2 class="text-2xl font-extrabold mb-2 tracking-tight">결과 화면 구성</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
+        분석 완료 후 4개의 카드 블록으로 결과가 표시됩니다. 각 블록의 역할을 확인하세요.
+      </p>
+
+      <!-- 설교 정보 카드 -->
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-md bg-brand-500/10 flex items-center justify-center">
+            <span class="text-[11px] font-black text-brand-600 dark:text-brand-400">①</span>
+          </div>
+          <p class="font-bold text-sm">설교 정보 카드</p>
+          <span class="text-xs text-gray-400 dark:text-gray-500">날짜·설교자·성경 본문·태그</span>
+        </div>
+        <div class="result-preview-block">
+          <div class="sermon-info-card">
+            <div class="flex flex-wrap items-center gap-2 mb-3">
+              <span
+                class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-brand-500 text-white text-[11px] font-bold">주일예배</span>
+            </div>
+            <h2 class="font-serif text-xl font-black leading-tight mb-4">중풍병자를 고치신 예수님</h2>
+            <div class="flex flex-wrap gap-x-5 gap-y-2 mb-4">
+              <div class="meta-item"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i><span>2026-03-15</span>
+              </div>
+              <div class="meta-item"><i data-lucide="church" class="w-3.5 h-3.5"></i><span>양산중앙교회</span></div>
+              <div class="meta-item"><i data-lucide="user" class="w-3.5 h-3.5"></i><span>정지훈 목사</span></div>
+              <div class="meta-item"><i data-lucide="book-open" class="w-3.5 h-3.5"></i><span>누가복음 5:17-26</span></div>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="tag">#치유</span><span class="tag">#믿음</span><span class="tag">#죄사함</span><span
+                class="tag">#예수님의권위</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 설교 요약 -->
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-md bg-[#4A6FA5]/10 flex items-center justify-center">
+            <span class="text-[11px] font-black" style="color:#4A6FA5;">②</span>
+          </div>
+          <p class="font-bold text-sm">설교 전체 요약</p>
+          <span class="text-xs text-gray-400 dark:text-gray-500">핵심 메시지 3~5문장</span>
+        </div>
+        <div class="result-preview-block">
+          <div class="result-preview-header">
+            <div class="block-icon block-header-summary" style="width:30px;height:30px;border-radius:8px;">
+              <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
+            </div>
+            <p class="text-sm font-bold">설교 전체 요약</p>
+          </div>
+          <div class="result-preview-body">
+            <div class="summary-text" style="font-size:14px;padding:16px 18px;">
+              본 설교에서 예수님은 중풍병자를 고치심으로써 <strong class="text-emphasis">육체의 치유보다 더 깊은 영혼의 치유</strong>가 가능하심을 선포하십니다. 지붕을 뚫고
+              친구를 데려온 이들의 믿음은 <mark class="highlight-mark">한 사람의 회복을 위해 모든 것을 내어놓는 진정한 사랑</mark>의 본이 됩니다. 예수님께서는 죄를 사하는
+              권위를 실증하시며 우리의 가장 근본적인 필요가 <strong class="text-emphasis">하나님과의 관계 회복</strong>임을 가르치십니다.
+            </div>
+          </div>
+        </div>
+        <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 ml-1">
+          <strong class="text-gray-500 dark:text-gray-400">굵은 글씨</strong> = 핵심 강조 &nbsp;|&nbsp; <span
+            style="color:#DC2626;font-weight:700;">빨간 글씨</span> = 특별 하이라이트
+        </p>
+      </div>
+
+      <!-- 내용 정리 -->
+      <div class="mb-6">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-md bg-[#527A5B]/10 flex items-center justify-center">
+            <span class="text-[11px] font-black" style="color:#527A5B;">③</span>
+          </div>
+          <p class="font-bold text-sm">내용 정리</p>
+          <span class="text-xs text-gray-400 dark:text-gray-500">소제목별 본문 + 핵심 포인트 + 성경 인용</span>
+        </div>
+        <div class="result-preview-block">
+          <div class="result-preview-header">
+            <div class="block-icon block-header-content" style="width:30px;height:30px;border-radius:8px;">
+              <i data-lucide="list-ordered" style="width:14px;height:14px;"></i>
+            </div>
+            <p class="text-sm font-bold">내용 정리</p>
+          </div>
+          <div class="result-preview-body">
+            <div class="content-section">
+              <div class="content-section-header">
+                <span class="section-number">1</span>
+                <div>
+                  <p class="section-title">친구의 지붕을 뚫는 믿음</p>
+                  <p class="section-subtitle">πίστις (피스티스) — 신뢰와 헌신</p>
+                </div>
+              </div>
+              <div class="section-body" style="padding-left:0;font-size:14px;">
+                <p>네 친구는 중풍병자를 고치기 위해 지붕을 뚫는 행동까지 마다하지 않았습니다. 예수님께서는 이들의 믿음을 보시고 죄 사함을 선언하셨습니다.</p>
+                <div class="key-point" style="font-size:13px;">
+                  <span class="key-point-icon">💡</span>
+                  <span>진정한 믿음은 불가능해 보이는 상황에서도 포기하지 않는 행동으로 나타납니다.</span>
+                </div>
+                <blockquote class="scripture-quote" style="font-size:13px;">
+                  "예수께서 그들의 믿음을 보시고 이르시되 소자야 네 죄 사함을 받았느니라"
+                  <cite class="scripture-ref">— 누가복음 5:20</cite>
+                </blockquote>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 결론 및 묵상 -->
+      <div class="mb-0">
+        <div class="flex items-center gap-2 mb-3">
+          <div class="w-6 h-6 rounded-md bg-[#C2785C]/10 flex items-center justify-center">
+            <span class="text-[11px] font-black" style="color:#C2785C;">④</span>
+          </div>
+          <p class="font-bold text-sm">결론 및 묵상</p>
+          <span class="text-xs text-gray-400 dark:text-gray-500">결론 3포인트 + 묵상 질문 4개</span>
+        </div>
+        <div class="result-preview-block">
+          <div class="result-preview-header">
+            <div class="block-icon block-header-meditation" style="width:30px;height:30px;border-radius:8px;">
+              <i data-lucide="heart-handshake" style="width:14px;height:14px;"></i>
+            </div>
+            <p class="text-sm font-bold">결론 및 묵상</p>
+          </div>
+          <div class="result-preview-body">
+            <div class="conclusion-text" style="font-size:14px;">
+              <ul>
+                <li>예수님은 육체와 영혼 모두를 고치시는 완전한 구원자이십니다.</li>
+                <li>죄 사함은 모든 회복의 출발점입니다.</li>
+                <li>주변 사람을 예수님께 데려오는 것이 우리의 사명입니다.</li>
+              </ul>
+            </div>
+            <div class="meditation-questions mt-4" style="font-size:13px;">
+              <h4><span>❤️</span> 묵상과 적용</h4>
+              <ol style="padding-left:18px;">
+                <li>나에게 가장 필요한 치유는 무엇인지 묵상해 보세요.</li>
+                <li>주변에 예수님께 데려가야 할 사람은 누구인가요?</li>
+                <li>내 믿음은 지붕을 뚫을 만큼 간절한가요?</li>
+                <li>오늘 죄 사함의 은혜를 어떻게 감사하며 살겠습니까?</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ════════════════════════════════════════
+       SECTION 5 — 내보내기
+  ════════════════════════════════════════ -->
+    <section id="section5" class="guide-section mb-16">
+      <div class="section-badge">
+        <i data-lucide="download" style="width:13px;height:13px;"></i> 5. 내보내기 기능
+      </div>
+      <h2 class="text-2xl font-extrabold mb-2 tracking-tight">결과를 다양한 형식으로 저장</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
+        분석이 완료되면 결과 화면 상단에 내보내기 도구모음이 표시됩니다.
+      </p>
+
+      <!-- 내보내기 툴바 모사 -->
+      <div class="ui-mock mb-8">
+        <div class="ui-mock-bar">
+          <div class="ui-mock-dot bg-red-400"></div>
+          <div class="ui-mock-dot bg-yellow-400"></div>
+          <div class="ui-mock-dot bg-green-400"></div>
+        </div>
+        <div class="p-4">
+          <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl glass-card">
+            <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
+              <i data-lucide="download" class="w-4 h-4"></i>
+              내보내기
+            </div>
+            <div class="flex flex-wrap gap-2">
+              <button class="export-btn highlight-ring pointer-events-none">
+                <i data-lucide="file-text" class="w-3.5 h-3.5"></i> MD
+              </button>
+<button class="export-btn pointer-events-none">
+                <i data-lucide="code" class="w-3.5 h-3.5"></i> HTML
               </button>
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="mt-4 space-y-2">
-          <p class="text-xs font-semibold text-gray-400 dark:text-gray-500 uppercase tracking-wider">지원하는 URL 형식</p>
-          <div class="flex flex-wrap gap-2">
-            <code class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtube.com/watch?v=…</code>
-            <code class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtu.be/…</code>
-            <code class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtube.com/shorts/…</code>
-            <code class="text-xs bg-gray-100 dark:bg-gray-800 px-2.5 py-1 rounded-lg font-mono text-gray-600 dark:text-gray-400">youtube.com/live/…</code>
+      <!-- 3가지 내보내기 상세 -->
+      <div class="export-showcase">
+        <!-- MD -->
+        <div class="export-row">
+          <div class="export-icon-box" style="background:rgba(82,122,91,0.1);">
+            <i data-lucide="file-text" style="width:20px;height:20px;color:#527A5B;"></i>
           </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- STEP 2 -->
-    <div class="flex gap-5 mb-2">
-      <div class="flex flex-col items-center gap-0">
-        <div class="step-circle">2</div>
-        <div class="step-connector flex-1 mt-2" style="min-height:240px;"></div>
-      </div>
-      <div class="flex-1 pb-10">
-        <p class="font-bold text-base mb-1 mt-1.5">분석이 진행됩니다</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-          영상 길이에 따라 <strong>1~3분</strong> 정도 소요됩니다. 진행 상황을 3단계로 보여줍니다.
-        </p>
-
-        <!-- 진행 상태 UI 모사 -->
-        <div class="ui-mock p-5 space-y-3">
-          <div class="progress-step done">
-            <div class="step-icon-wrap">
-              <i data-lucide="video" class="w-4 h-4"></i>
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <p class="font-bold text-sm">Markdown (.md)</p>
+              <span
+                class="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 font-semibold">MD
+                버튼</span>
             </div>
-            <div class="flex-1">
-              <p class="step-title">설교 정보 추출</p>
-              <p class="step-status">완료</p>
+            <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Obsidian, Notion, Logseq 등 노트 앱에 바로 임포트할
+              수 있는 형식입니다. 날짜·설교자·본문 등 frontmatter 메타데이터가 포함됩니다.</p>
+          </div>
+        </div>
+        <!-- HTML -->
+        <div class="export-row">
+          <div class="export-icon-box" style="background:rgba(194,120,92,0.1);">
+            <i data-lucide="code" style="width:20px;height:20px;color:#C2785C;"></i>
+          </div>
+          <div class="flex-1">
+            <div class="flex items-center gap-2 mb-1">
+              <p class="font-bold text-sm">독립형 HTML (.html)</p>
+              <span
+                class="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 font-semibold">HTML
+                버튼</span>
             </div>
-          </div>
-          <div class="progress-step done">
-            <div class="step-icon-wrap">
-              <i data-lucide="file-audio" class="w-4 h-4"></i>
-            </div>
-            <div class="flex-1">
-              <p class="step-title">설교 스크립트 정리</p>
-              <p class="step-status">완료</p>
-            </div>
-          </div>
-          <div class="progress-step active">
-            <div class="step-icon-wrap">
-              <i data-lucide="brain" class="w-4 h-4"></i>
-            </div>
-            <div class="flex-1">
-              <p class="step-title">설교 내용 분석 및 정리</p>
-              <p class="step-status">설교를 요약하고 있습니다</p>
-            </div>
-          </div>
-          <div class="flex items-center gap-3 pt-1">
-            <div class="flex-1 h-1.5 rounded-full bg-gray-200/60 dark:bg-gray-700/60 overflow-hidden">
-              <div class="h-full rounded-full bg-gradient-to-r from-brand-600 to-violet-500 transition-all" style="width:72%"></div>
-            </div>
-            <span class="text-xs font-semibold text-gray-400 w-8 text-right">72%</span>
+            <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">모든 스타일이 내장된 독립 HTML 파일로 내려받습니다. 브라우저에서
+              바로 열 수 있으며, 이메일 첨부나 장기 보관에 적합합니다.</p>
           </div>
         </div>
       </div>
-    </div>
 
-    <!-- STEP 3 -->
-    <div class="flex gap-5">
-      <div class="flex flex-col items-center">
-        <div class="step-circle">3</div>
+      <div class="mt-6 callout">
+        <i data-lucide="info" class="w-4 h-4 callout-icon mt-0.5"></i>
+        <p class="text-sm text-gray-600 dark:text-gray-400">내려받은 파일은 브라우저 기본 다운로드 폴더에 저장됩니다. 파일명은 <code
+            class="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded font-mono">날짜_설교제목.확장자</code> 형식입니다.</p>
       </div>
-      <div class="flex-1 mt-1.5">
-        <p class="font-bold text-base mb-1">결과를 확인하세요</p>
-        <p class="text-sm text-gray-500 dark:text-gray-400 mb-5 leading-relaxed">
-          분석이 완료되면 결과 화면이 자동으로 표시됩니다. 스크롤하며 설교 요약과 묵상 포인트를 확인하세요.
-        </p>
-        <div class="callout">
-          <i data-lucide="check-circle-2" class="w-4 h-4 callout-icon mt-0.5" style="color:#10B981;"></i>
-          <p class="text-sm text-gray-600 dark:text-gray-400">분석 완료 후 <strong>"설교 분석이 완료되었습니다!"</strong> 알림이 화면 우하단에 표시됩니다.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+    </section>
 
-  <!-- ════════════════════════════════════════
-       SECTION 3 — 즐겨찾기
-  ════════════════════════════════════════ -->
-  <section id="section3" class="guide-section mb-16">
-    <div class="section-badge">
-      <i data-lucide="bookmark" style="width:13px;height:13px;"></i> 3. 즐겨찾기 기능
-    </div>
-    <h2 class="text-2xl font-extrabold mb-2 tracking-tight">자주 보는 채널을 등록하세요</h2>
-    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-      YouTube 채널 URL을 등록하면 첫 화면에서 최근 설교 5개가 자동으로 표시됩니다. 영상 카드를 클릭하면 URL이 바로 입력됩니다.
-    </p>
-
-    <!-- 네비게이션 바 위치 안내 -->
-    <div class="ui-mock mb-6">
-      <div class="ui-mock-bar">
-        <div class="ui-mock-dot bg-red-400"></div>
-        <div class="ui-mock-dot bg-yellow-400"></div>
-        <div class="ui-mock-dot bg-green-400"></div>
-      </div>
-      <div class="px-5 py-4 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
-            <i data-lucide="book-open" class="text-white" style="width:14px;height:14px;"></i>
-          </div>
-          <span class="text-sm font-bold">말씀을삶으로</span>
-        </div>
-        <div class="flex items-center gap-2">
-          <!-- 즐겨찾기 버튼 강조 -->
-          <div class="relative">
-            <button class="nav-btn highlight-ring pointer-events-none flex items-center gap-1.5">
-              <i data-lucide="bookmark" class="w-4 h-4"></i>
-              <span class="text-xs font-semibold">즐겨찾기</span>
-            </button>
-            <div class="arrow-label absolute -bottom-8 left-1/2 -translate-x-1/2 whitespace-nowrap">
-              <i data-lucide="arrow-up" style="width:12px;height:12px;"></i> 여기를 클릭
-            </div>
-          </div>
-          <button class="nav-btn pointer-events-none flex items-center gap-1.5">
-            <i data-lucide="book-marked" class="w-4 h-4"></i>
-            <span class="text-xs font-semibold">가이드</span>
-          </button>
-          <button class="nav-btn pointer-events-none">
-            <i data-lucide="moon" class="w-4 h-4"></i>
-          </button>
-        </div>
-      </div>
-    </div>
-
-    <div style="height: 24px;"></div>
-
-    <!-- 모달 UI 모사 -->
-    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">즐겨찾기 설정 화면</p>
-    <div class="ui-mock max-w-md mb-6">
-      <div class="flex items-center justify-between p-5 border-b border-gray-200/80 dark:border-gray-700/80">
-        <div class="flex items-center gap-2.5">
-          <div class="w-8 h-8 rounded-lg bg-brand-500/10 flex items-center justify-center">
-            <i data-lucide="bookmark" class="w-4 h-4 text-brand-600 dark:text-brand-400"></i>
-          </div>
-          <h2 class="text-base font-bold">즐겨찾기 채널 설정</h2>
-        </div>
-        <div class="w-8 h-8 rounded-lg bg-gray-100 dark:bg-gray-800 flex items-center justify-center">
-          <i data-lucide="x" class="w-4 h-4"></i>
-        </div>
-      </div>
-      <div class="p-5 space-y-4">
-        <div class="flex items-start gap-2.5 p-3 rounded-xl bg-brand-50 dark:bg-brand-900/20 border border-brand-200/60 dark:border-brand-800/40">
-          <i data-lucide="info" class="w-4 h-4 text-brand-600 dark:text-brand-400 mt-0.5"></i>
-          <p class="text-xs text-brand-700 dark:text-brand-300 leading-relaxed">채널 URL을 등록하면 최근 설교 5개를 첫 화면에서 바로 선택할 수 있습니다.</p>
-        </div>
-        <div class="space-y-1.5">
-          <label class="text-xs font-semibold text-gray-500">채널 1</label>
-          <input readonly value="https://www.youtube.com/@양산중앙교회-t6k" class="input-field text-sm text-gray-600 dark:text-gray-300" style="pointer-events:none;">
-        </div>
-        <div class="space-y-1.5">
-          <label class="text-xs font-semibold text-gray-500">채널 2 (선택)</label>
-          <input readonly placeholder="https://www.youtube.com/@channel" class="input-field text-sm" style="pointer-events:none;">
-        </div>
-        <button class="w-full py-2.5 rounded-xl bg-gradient-to-r from-brand-600 to-brand-500 text-white text-sm font-bold flex items-center justify-center gap-2 pointer-events-none shadow-lg shadow-brand-500/20">
-          <i data-lucide="check" class="w-4 h-4"></i> 저장하기
-        </button>
-      </div>
-    </div>
-
-    <!-- 최근 영상 표시 안내 -->
-    <div class="callout mb-6">
-      <i data-lucide="zap" class="w-4 h-4 callout-icon mt-0.5"></i>
-      <div class="text-sm text-gray-600 dark:text-gray-400">
-        <p class="font-semibold mb-1">채널 URL 찾는 방법</p>
-        <p>YouTube에서 채널 페이지에 들어간 뒤 주소창의 URL을 복사하세요.<br>
-        <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded font-mono">https://www.youtube.com/@채널핸들</code> 또는
-        <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded font-mono">/channel/UCxxx</code> 형식 모두 지원합니다.</p>
-      </div>
-    </div>
-
-    <!-- 최근 영상 카드 미리보기 -->
-    <p class="text-sm font-semibold text-gray-500 dark:text-gray-400 mb-3">등록 후 첫 화면에 표시되는 최근 영상 카드</p>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-3">
-      <div class="video-card pointer-events-none">
-        <div class="aspect-video rounded-lg bg-gradient-to-br from-gray-200 to-gray-300 dark:from-gray-700 dark:to-gray-800 mb-2 flex items-center justify-center">
-          <i data-lucide="play" class="w-6 h-6 text-gray-400"></i>
-        </div>
-        <p class="video-card-title">2026년 3월 주일 설교 — 말씀과 삶</p>
-        <p class="video-card-date">Mar 15</p>
-      </div>
-      <div class="video-card pointer-events-none">
-        <div class="aspect-video rounded-lg bg-gradient-to-br from-brand-100 to-brand-200 dark:from-brand-900/40 dark:to-brand-800/40 mb-2 flex items-center justify-center">
-          <i data-lucide="play" class="w-6 h-6 text-brand-400"></i>
-        </div>
-        <p class="video-card-title">은혜의 물결 — 요한복음 4장</p>
-        <p class="video-card-date">Mar 8</p>
-      </div>
-      <div class="video-card pointer-events-none sm:block hidden">
-        <div class="aspect-video rounded-lg bg-gradient-to-br from-emerald-100 to-teal-200 dark:from-emerald-900/40 dark:to-teal-800/40 mb-2 flex items-center justify-center">
-          <i data-lucide="play" class="w-6 h-6 text-emerald-400"></i>
-        </div>
-        <p class="video-card-title">믿음으로 서는 삶</p>
-        <p class="video-card-date">Mar 2</p>
-      </div>
-      <div class="video-card pointer-events-none sm:block hidden">
-        <div class="aspect-video rounded-lg bg-gradient-to-br from-amber-100 to-orange-200 dark:from-amber-900/40 dark:to-orange-800/40 mb-2 flex items-center justify-center">
-          <i data-lucide="play" class="w-6 h-6 text-amber-400"></i>
-        </div>
-        <p class="video-card-title">하나님의 계획 안에서</p>
-        <p class="video-card-date">Feb 22</p>
-      </div>
-    </div>
-    <p class="text-xs text-gray-400 dark:text-gray-500 mt-3 text-center">카드를 클릭하면 URL이 입력창에 자동으로 들어갑니다</p>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       SECTION 4 — 분석 결과 상세
-  ════════════════════════════════════════ -->
-  <section id="section4" class="guide-section mb-16">
-    <div class="section-badge">
-      <i data-lucide="layout-list" style="width:13px;height:13px;"></i> 4. 분석 결과 상세 보기
-    </div>
-    <h2 class="text-2xl font-extrabold mb-2 tracking-tight">결과 화면 구성</h2>
-    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-      분석 완료 후 4개의 카드 블록으로 결과가 표시됩니다. 각 블록의 역할을 확인하세요.
-    </p>
-
-    <!-- 설교 정보 카드 -->
-    <div class="mb-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-6 h-6 rounded-md bg-brand-500/10 flex items-center justify-center">
-          <span class="text-[11px] font-black text-brand-600 dark:text-brand-400">①</span>
-        </div>
-        <p class="font-bold text-sm">설교 정보 카드</p>
-        <span class="text-xs text-gray-400 dark:text-gray-500">날짜·설교자·성경 본문·태그</span>
-      </div>
-      <div class="result-preview-block">
-        <div class="sermon-info-card">
-          <div class="flex flex-wrap items-center gap-2 mb-3">
-            <span class="inline-flex items-center px-2.5 py-0.5 rounded-full bg-brand-500 text-white text-[11px] font-bold">주일예배</span>
-          </div>
-          <h2 class="font-serif text-xl font-black leading-tight mb-4">중풍병자를 고치신 예수님</h2>
-          <div class="flex flex-wrap gap-x-5 gap-y-2 mb-4">
-            <div class="meta-item"><i data-lucide="calendar-days" class="w-3.5 h-3.5"></i><span>2026-03-15</span></div>
-            <div class="meta-item"><i data-lucide="church" class="w-3.5 h-3.5"></i><span>양산중앙교회</span></div>
-            <div class="meta-item"><i data-lucide="user" class="w-3.5 h-3.5"></i><span>정지훈 목사</span></div>
-            <div class="meta-item"><i data-lucide="book-open" class="w-3.5 h-3.5"></i><span>누가복음 5:17-26</span></div>
-          </div>
-          <div class="flex flex-wrap gap-1.5">
-            <span class="tag">#치유</span><span class="tag">#믿음</span><span class="tag">#죄사함</span><span class="tag">#예수님의권위</span>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 설교 요약 -->
-    <div class="mb-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-6 h-6 rounded-md bg-[#4A6FA5]/10 flex items-center justify-center">
-          <span class="text-[11px] font-black" style="color:#4A6FA5;">②</span>
-        </div>
-        <p class="font-bold text-sm">설교 전체 요약</p>
-        <span class="text-xs text-gray-400 dark:text-gray-500">핵심 메시지 3~5문장</span>
-      </div>
-      <div class="result-preview-block">
-        <div class="result-preview-header">
-          <div class="block-icon block-header-summary" style="width:30px;height:30px;border-radius:8px;">
-            <i data-lucide="bookmark" style="width:14px;height:14px;"></i>
-          </div>
-          <p class="text-sm font-bold">설교 전체 요약</p>
-        </div>
-        <div class="result-preview-body">
-          <div class="summary-text" style="font-size:14px;padding:16px 18px;">
-            본 설교에서 예수님은 중풍병자를 고치심으로써 <strong class="text-emphasis">육체의 치유보다 더 깊은 영혼의 치유</strong>가 가능하심을 선포하십니다. 지붕을 뚫고 친구를 데려온 이들의 믿음은 <mark class="highlight-mark">한 사람의 회복을 위해 모든 것을 내어놓는 진정한 사랑</mark>의 본이 됩니다. 예수님께서는 죄를 사하는 권위를 실증하시며 우리의 가장 근본적인 필요가 <strong class="text-emphasis">하나님과의 관계 회복</strong>임을 가르치십니다.
-          </div>
-        </div>
-      </div>
-      <p class="text-xs text-gray-400 dark:text-gray-500 mt-2 ml-1">
-        <strong class="text-gray-500 dark:text-gray-400">굵은 글씨</strong> = 핵심 강조 &nbsp;|&nbsp; <span style="color:#DC2626;font-weight:700;">빨간 글씨</span> = 특별 하이라이트
-      </p>
-    </div>
-
-    <!-- 내용 정리 -->
-    <div class="mb-6">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-6 h-6 rounded-md bg-[#527A5B]/10 flex items-center justify-center">
-          <span class="text-[11px] font-black" style="color:#527A5B;">③</span>
-        </div>
-        <p class="font-bold text-sm">내용 정리</p>
-        <span class="text-xs text-gray-400 dark:text-gray-500">소제목별 본문 + 핵심 포인트 + 성경 인용</span>
-      </div>
-      <div class="result-preview-block">
-        <div class="result-preview-header">
-          <div class="block-icon block-header-content" style="width:30px;height:30px;border-radius:8px;">
-            <i data-lucide="list-ordered" style="width:14px;height:14px;"></i>
-          </div>
-          <p class="text-sm font-bold">내용 정리</p>
-        </div>
-        <div class="result-preview-body">
-          <div class="content-section">
-            <div class="content-section-header">
-              <span class="section-number">1</span>
-              <div>
-                <p class="section-title">친구의 지붕을 뚫는 믿음</p>
-                <p class="section-subtitle">πίστις (피스티스) — 신뢰와 헌신</p>
-              </div>
-            </div>
-            <div class="section-body" style="padding-left:0;font-size:14px;">
-              <p>네 친구는 중풍병자를 고치기 위해 지붕을 뚫는 행동까지 마다하지 않았습니다. 예수님께서는 이들의 믿음을 보시고 죄 사함을 선언하셨습니다.</p>
-              <div class="key-point" style="font-size:13px;">
-                <span class="key-point-icon">💡</span>
-                <span>진정한 믿음은 불가능해 보이는 상황에서도 포기하지 않는 행동으로 나타납니다.</span>
-              </div>
-              <blockquote class="scripture-quote" style="font-size:13px;">
-                "예수께서 그들의 믿음을 보시고 이르시되 소자야 네 죄 사함을 받았느니라"
-                <cite class="scripture-ref">— 누가복음 5:20</cite>
-              </blockquote>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 결론 및 묵상 -->
-    <div class="mb-0">
-      <div class="flex items-center gap-2 mb-3">
-        <div class="w-6 h-6 rounded-md bg-[#C2785C]/10 flex items-center justify-center">
-          <span class="text-[11px] font-black" style="color:#C2785C;">④</span>
-        </div>
-        <p class="font-bold text-sm">결론 및 묵상</p>
-        <span class="text-xs text-gray-400 dark:text-gray-500">결론 3포인트 + 묵상 질문 4개</span>
-      </div>
-      <div class="result-preview-block">
-        <div class="result-preview-header">
-          <div class="block-icon block-header-meditation" style="width:30px;height:30px;border-radius:8px;">
-            <i data-lucide="heart-handshake" style="width:14px;height:14px;"></i>
-          </div>
-          <p class="text-sm font-bold">결론 및 묵상</p>
-        </div>
-        <div class="result-preview-body">
-          <div class="conclusion-text" style="font-size:14px;">
-            <ul>
-              <li>예수님은 육체와 영혼 모두를 고치시는 완전한 구원자이십니다.</li>
-              <li>죄 사함은 모든 회복의 출발점입니다.</li>
-              <li>주변 사람을 예수님께 데려오는 것이 우리의 사명입니다.</li>
-            </ul>
-          </div>
-          <div class="meditation-questions mt-4" style="font-size:13px;">
-            <h4><span>❤️</span> 묵상과 적용</h4>
-            <ol style="padding-left:18px;">
-              <li>나에게 가장 필요한 치유는 무엇인지 묵상해 보세요.</li>
-              <li>주변에 예수님께 데려가야 할 사람은 누구인가요?</li>
-              <li>내 믿음은 지붕을 뚫을 만큼 간절한가요?</li>
-              <li>오늘 죄 사함의 은혜를 어떻게 감사하며 살겠습니까?</li>
-            </ol>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
-       SECTION 5 — 내보내기
-  ════════════════════════════════════════ -->
-  <section id="section5" class="guide-section mb-16">
-    <div class="section-badge">
-      <i data-lucide="download" style="width:13px;height:13px;"></i> 5. 내보내기 기능
-    </div>
-    <h2 class="text-2xl font-extrabold mb-2 tracking-tight">결과를 다양한 형식으로 저장</h2>
-    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-      분석이 완료되면 결과 화면 상단에 내보내기 도구모음이 표시됩니다.
-    </p>
-
-    <!-- 내보내기 툴바 모사 -->
-    <div class="ui-mock mb-8">
-      <div class="ui-mock-bar">
-        <div class="ui-mock-dot bg-red-400"></div>
-        <div class="ui-mock-dot bg-yellow-400"></div>
-        <div class="ui-mock-dot bg-green-400"></div>
-      </div>
-      <div class="p-4">
-        <div class="flex flex-wrap items-center justify-between gap-3 p-3 rounded-2xl glass-card">
-          <div class="flex items-center gap-2 text-xs font-semibold text-gray-500 dark:text-gray-400">
-            <i data-lucide="download" class="w-4 h-4"></i>
-            내보내기
-          </div>
-          <div class="flex flex-wrap gap-2">
-            <button class="export-btn highlight-ring pointer-events-none">
-              <i data-lucide="file-text" class="w-3.5 h-3.5"></i> MD
-            </button>
-            <button class="export-btn pointer-events-none">
-              <i data-lucide="image" class="w-3.5 h-3.5"></i> 이미지
-            </button>
-            <button class="export-btn pointer-events-none">
-              <i data-lucide="code" class="w-3.5 h-3.5"></i> HTML
-            </button>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- 3가지 내보내기 상세 -->
-    <div class="export-showcase">
-      <!-- MD -->
-      <div class="export-row">
-        <div class="export-icon-box" style="background:rgba(82,122,91,0.1);">
-          <i data-lucide="file-text" style="width:20px;height:20px;color:#527A5B;"></i>
-        </div>
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <p class="font-bold text-sm">Markdown (.md)</p>
-            <span class="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 font-semibold">MD 버튼</span>
-          </div>
-          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">Obsidian, Notion, Logseq 등 노트 앱에 바로 임포트할 수 있는 형식입니다. 날짜·설교자·본문 등 frontmatter 메타데이터가 포함됩니다.</p>
-        </div>
-      </div>
-      <!-- 이미지 -->
-      <div class="export-row">
-        <div class="export-icon-box" style="background:rgba(99,102,241,0.1);">
-          <i data-lucide="image" style="width:20px;height:20px;color:#6366f1;"></i>
-        </div>
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <p class="font-bold text-sm">이미지 (.png)</p>
-            <span class="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 font-semibold">이미지 버튼</span>
-          </div>
-          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">결과 화면 전체를 고해상도(2배) PNG 이미지로 캡처합니다. SNS 공유나 인쇄에 적합합니다. 다크모드가 적용된 상태로도 캡처됩니다.</p>
-        </div>
-      </div>
-      <!-- HTML -->
-      <div class="export-row">
-        <div class="export-icon-box" style="background:rgba(194,120,92,0.1);">
-          <i data-lucide="code" style="width:20px;height:20px;color:#C2785C;"></i>
-        </div>
-        <div class="flex-1">
-          <div class="flex items-center gap-2 mb-1">
-            <p class="font-bold text-sm">독립형 HTML (.html)</p>
-            <span class="text-[11px] px-2 py-0.5 rounded-full bg-gray-100 dark:bg-gray-800 text-gray-500 font-semibold">HTML 버튼</span>
-          </div>
-          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed">모든 스타일이 내장된 독립 HTML 파일로 내려받습니다. 브라우저에서 바로 열 수 있으며, 이메일 첨부나 장기 보관에 적합합니다.</p>
-        </div>
-      </div>
-    </div>
-
-    <div class="mt-6 callout">
-      <i data-lucide="info" class="w-4 h-4 callout-icon mt-0.5"></i>
-      <p class="text-sm text-gray-600 dark:text-gray-400">내려받은 파일은 브라우저 기본 다운로드 폴더에 저장됩니다. 파일명은 <code class="text-xs bg-gray-100 dark:bg-gray-800 px-1 py-0.5 rounded font-mono">날짜_설교제목.확장자</code> 형식입니다.</p>
-    </div>
-  </section>
-
-  <!-- ════════════════════════════════════════
+    <!-- ════════════════════════════════════════
        SECTION 6 — 화면 설정
   ════════════════════════════════════════ -->
-  <section id="section6" class="guide-section mb-0">
-    <div class="section-badge">
-      <i data-lucide="settings" style="width:13px;height:13px;"></i> 6. 화면 설정
-    </div>
-    <h2 class="text-2xl font-extrabold mb-2 tracking-tight">다크모드 & 홈으로 이동</h2>
-    <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
-      화면 우상단 버튼으로 즐겨찾기·가이드·테마를 조작하고, 로고 클릭으로 언제든 처음 화면으로 돌아갈 수 있습니다.
-    </p>
+    <section id="section6" class="guide-section mb-0">
+      <div class="section-badge">
+        <i data-lucide="settings" style="width:13px;height:13px;"></i> 6. 화면 설정
+      </div>
+      <h2 class="text-2xl font-extrabold mb-2 tracking-tight">다크모드 & 홈으로 이동</h2>
+      <p class="text-gray-500 dark:text-gray-400 text-sm leading-relaxed mb-8">
+        화면 우상단 버튼으로 즐겨찾기·가이드·테마를 조작하고, 로고 클릭으로 언제든 처음 화면으로 돌아갈 수 있습니다.
+      </p>
 
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
-      <!-- 다크모드 -->
-      <div class="feature-card">
-        <div class="w-10 h-10 rounded-xl bg-gray-900 dark:bg-gray-100 flex items-center justify-center mb-4">
-          <i data-lucide="moon" class="text-white dark:text-gray-900" style="width:18px;height:18px;"></i>
-        </div>
-        <h3 class="font-bold mb-2">다크 / 라이트 모드</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
-          오른쪽 상단의 달/태양 아이콘 버튼을 클릭하면 테마가 전환됩니다. 설정은 자동으로 저장되어 다음 방문 시에도 유지됩니다.
-        </p>
-        <div class="flex items-center gap-3">
-          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm">
-            <i data-lucide="sun" style="width:14px;height:14px;color:#d97706;"></i>
-            <span class="text-xs font-semibold">라이트</span>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-6">
+        <!-- 다크모드 -->
+        <div class="feature-card">
+          <div class="w-10 h-10 rounded-xl bg-gray-900 dark:bg-gray-100 flex items-center justify-center mb-4">
+            <i data-lucide="moon" class="text-white dark:text-gray-900" style="width:18px;height:18px;"></i>
           </div>
-          <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-gray-400"></i>
-          <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 text-sm">
-            <i data-lucide="moon" style="width:14px;height:14px;color:#a5b4fc;"></i>
-            <span class="text-xs font-semibold text-gray-200">다크</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- 홈으로 이동 -->
-      <div class="feature-card">
-        <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mb-4 shadow-lg shadow-brand-500/20">
-          <i data-lucide="book-open" class="text-white" style="width:18px;height:18px;"></i>
-        </div>
-        <h3 class="font-bold mb-2">로고 클릭 → 홈 복귀</h3>
-        <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
-          분석 결과를 보는 중이어도 좌상단 로고(아이콘 + "말씀을삶으로")를 클릭하면 언제든 초기 화면으로 돌아갑니다.
-        </p>
-        <div class="callout" style="padding:10px 14px;">
-          <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 callout-icon mt-0.5" style="width:14px;height:14px;"></i>
-          <p class="text-xs text-gray-600 dark:text-gray-400">입력창 초기화, 결과 화면 닫힘, 최근 영상 복구</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- 네비게이션 바 전체 안내 -->
-    <div class="ui-mock">
-      <div class="ui-mock-bar">
-        <div class="ui-mock-dot bg-red-400"></div>
-        <div class="ui-mock-dot bg-yellow-400"></div>
-        <div class="ui-mock-dot bg-green-400"></div>
-      </div>
-      <div class="px-5 py-4 flex items-center justify-between">
-        <div class="relative">
-          <a href="#" class="flex items-center gap-2 group pointer-events-none">
-            <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center highlight-ring">
-              <i data-lucide="book-open" class="text-white" style="width:14px;height:14px;"></i>
+          <h3 class="font-bold mb-2">다크 / 라이트 모드</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
+            오른쪽 상단의 달/태양 아이콘 버튼을 클릭하면 테마가 전환됩니다. 설정은 자동으로 저장되어 다음 방문 시에도 유지됩니다.
+          </p>
+          <div class="flex items-center gap-3">
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-100 dark:bg-gray-800 text-sm">
+              <i data-lucide="sun" style="width:14px;height:14px;color:#d97706;"></i>
+              <span class="text-xs font-semibold">라이트</span>
             </div>
-            <span class="text-sm font-bold">말씀을삶으로</span>
-          </a>
-          <div class="arrow-label absolute -bottom-8 left-0 whitespace-nowrap text-xs">
-            <i data-lucide="arrow-up" style="width:11px;height:11px;"></i> 클릭 시 홈 복귀
-          </div>
-        </div>
-        <div class="flex items-center gap-2">
-          <div class="relative">
-            <button class="nav-btn pointer-events-none flex items-center gap-1.5">
-              <i data-lucide="bookmark" class="w-4 h-4"></i>
-              <span class="text-xs font-semibold hidden sm:inline">즐겨찾기</span>
-            </button>
-          </div>
-          <div class="relative">
-            <button class="nav-btn pointer-events-none flex items-center gap-1.5">
-              <i data-lucide="book-marked" class="w-4 h-4"></i>
-              <span class="text-xs font-semibold hidden sm:inline">가이드</span>
-            </button>
-          </div>
-          <div class="relative">
-            <button class="nav-btn highlight-ring pointer-events-none">
-              <i data-lucide="moon" class="w-4 h-4"></i>
-            </button>
-            <div class="arrow-label absolute -bottom-8 right-0 whitespace-nowrap text-xs">
-              <i data-lucide="arrow-up" style="width:11px;height:11px;"></i> 테마 전환
+            <i data-lucide="arrow-right" class="w-3.5 h-3.5 text-gray-400"></i>
+            <div class="flex items-center gap-2 px-3 py-2 rounded-lg bg-gray-800 text-sm">
+              <i data-lucide="moon" style="width:14px;height:14px;color:#a5b4fc;"></i>
+              <span class="text-xs font-semibold text-gray-200">다크</span>
             </div>
           </div>
         </div>
+
+        <!-- 홈으로 이동 -->
+        <div class="feature-card">
+          <div
+            class="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center mb-4 shadow-lg shadow-brand-500/20">
+            <i data-lucide="book-open" class="text-white" style="width:18px;height:18px;"></i>
+          </div>
+          <h3 class="font-bold mb-2">로고 클릭 → 홈 복귀</h3>
+          <p class="text-xs text-gray-500 dark:text-gray-400 leading-relaxed mb-4">
+            분석 결과를 보는 중이어도 좌상단 로고(아이콘 + "말씀을삶으로")를 클릭하면 언제든 초기 화면으로 돌아갑니다.
+          </p>
+          <div class="callout" style="padding:10px 14px;">
+            <i data-lucide="rotate-ccw" class="w-3.5 h-3.5 callout-icon mt-0.5" style="width:14px;height:14px;"></i>
+            <p class="text-xs text-gray-600 dark:text-gray-400">입력창 초기화, 결과 화면 닫힘, 최근 영상 복구</p>
+          </div>
+        </div>
       </div>
-    </div>
-  </section>
 
-</main>
-
-<!-- FOOTER -->
-<footer class="border-t border-gray-200/60 dark:border-gray-800/60 py-8 mt-12">
-  <div class="max-w-3xl mx-auto px-4 text-center">
-    <div class="flex items-center justify-center gap-2 mb-3">
-      <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
-        <i data-lucide="book-open" class="text-white" style="width:13px;height:13px;"></i>
+      <!-- 네비게이션 바 전체 안내 -->
+      <div class="ui-mock">
+        <div class="ui-mock-bar">
+          <div class="ui-mock-dot bg-red-400"></div>
+          <div class="ui-mock-dot bg-yellow-400"></div>
+          <div class="ui-mock-dot bg-green-400"></div>
+        </div>
+        <div class="px-5 py-4 flex items-center justify-between">
+          <div class="relative">
+            <a href="#" class="flex items-center gap-2 group pointer-events-none">
+              <div
+                class="w-8 h-8 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center highlight-ring">
+                <i data-lucide="book-open" class="text-white" style="width:14px;height:14px;"></i>
+              </div>
+              <span class="text-sm font-bold">말씀을삶으로</span>
+            </a>
+            <div class="arrow-label absolute -bottom-8 left-0 whitespace-nowrap text-xs">
+              <i data-lucide="arrow-up" style="width:11px;height:11px;"></i> 클릭 시 홈 복귀
+            </div>
+          </div>
+          <div class="flex items-center gap-2">
+            <div class="relative">
+              <button class="nav-btn pointer-events-none flex items-center gap-1.5">
+                <i data-lucide="bookmark" class="w-4 h-4"></i>
+                <span class="text-xs font-semibold hidden sm:inline">즐겨찾기</span>
+              </button>
+            </div>
+            <div class="relative">
+              <button class="nav-btn pointer-events-none flex items-center gap-1.5">
+                <i data-lucide="book-marked" class="w-4 h-4"></i>
+                <span class="text-xs font-semibold hidden sm:inline">가이드</span>
+              </button>
+            </div>
+            <div class="relative">
+              <button class="nav-btn highlight-ring pointer-events-none">
+                <i data-lucide="moon" class="w-4 h-4"></i>
+              </button>
+              <div class="arrow-label absolute -bottom-8 right-0 whitespace-nowrap text-xs">
+                <i data-lucide="arrow-up" style="width:11px;height:11px;"></i> 테마 전환
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <span class="text-sm font-bold">말씀을삶으로</span>
+    </section>
+
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="border-t border-gray-200/60 dark:border-gray-800/60 py-8 mt-12">
+    <div class="max-w-3xl mx-auto px-4 text-center">
+      <div class="flex items-center justify-center gap-2 mb-3">
+        <div class="w-7 h-7 rounded-lg bg-gradient-to-br from-brand-500 to-brand-700 flex items-center justify-center">
+          <i data-lucide="book-open" class="text-white" style="width:13px;height:13px;"></i>
+        </div>
+        <span class="text-sm font-bold">말씀을삶으로</span>
+      </div>
+      <a href="index.html"
+        class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold transition-colors mb-4">
+        <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
+        앱 시작하기
+      </a>
+      <p class="text-xs text-gray-400 dark:text-gray-600">
+        © 2026 말씀을삶으로 — 온전한 묵상을 위한 설교 요약 도우미
+      </p>
     </div>
-    <a href="index.html" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-brand-500 hover:bg-brand-600 text-white text-sm font-semibold transition-colors mb-4">
-      <i data-lucide="arrow-right" style="width:14px;height:14px;"></i>
-      앱 시작하기
-    </a>
-    <p class="text-xs text-gray-400 dark:text-gray-600">
-      © 2026 말씀을삶으로 — 온전한 묵상을 위한 설교 요약 도우미
-    </p>
-  </div>
-</footer>
+  </footer>
 
-<script>
-  document.addEventListener('DOMContentLoaded', () => {
-    lucide.createIcons();
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
 
-    // 다크모드 복구
-    const saved = localStorage.getItem('sermon_analyzer_theme');
-    if (saved === 'dark') {
-      document.documentElement.classList.add('dark');
-      updateIcon('dark');
-    }
-
-    document.getElementById('btnThemeToggle').addEventListener('click', () => {
-      const isDark = document.documentElement.classList.toggle('dark');
-      const next = isDark ? 'dark' : 'light';
-      localStorage.setItem('sermon_analyzer_theme', next);
-      updateIcon(next);
-    });
-
-    function updateIcon(theme) {
-      const el = document.getElementById('themeIcon');
-      if (el) {
-        el.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
-        lucide.createIcons();
+      // 다크모드 복구
+      const saved = localStorage.getItem('sermon_analyzer_theme');
+      if (saved === 'dark') {
+        document.documentElement.classList.add('dark');
+        updateIcon('dark');
       }
-    }
-  });
-</script>
+
+      document.getElementById('btnThemeToggle').addEventListener('click', () => {
+        const isDark = document.documentElement.classList.toggle('dark');
+        const next = isDark ? 'dark' : 'light';
+        localStorage.setItem('sermon_analyzer_theme', next);
+        updateIcon(next);
+      });
+
+      function updateIcon(theme) {
+        const el = document.getElementById('themeIcon');
+        if (el) {
+          el.setAttribute('data-lucide', theme === 'dark' ? 'sun' : 'moon');
+          lucide.createIcons();
+        }
+      }
+    });
+  </script>
 </body>
+
 </html>
