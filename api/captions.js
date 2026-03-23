@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════════════
-   captions — YouTube 영상 자막 추출
+   captions — YouTube 영상 자막 추출 (Vercel Serverless Function)
    ANDROID Innertube Player API로 captionTracks 조회 후
    서명된 baseUrl로 timedtext XML 호출하여 자막 텍스트 반환
    API 키 불필요
@@ -9,15 +9,12 @@ const INNERTUBE_URL = 'https://www.youtube.com/youtubei/v1/player?prettyPrint=fa
 const ANDROID_VERSION = '20.10.38';
 const ANDROID_UA = `com.google.android.youtube/${ANDROID_VERSION} (Linux; U; Android 14)`;
 
-exports.handler = async (event) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  };
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const videoId = event.queryStringParameters?.videoId;
+  const videoId = req.query.videoId;
   if (!videoId) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: 'videoId required' }) };
+    return res.status(400).json({ error: 'videoId required' });
   }
 
   try {
@@ -40,14 +37,14 @@ exports.handler = async (event) => {
     });
 
     if (!playerRes.ok) {
-      return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
+      return res.status(200).json({ captions: null });
     }
 
     const playerData = await playerRes.json();
     const tracks = playerData?.captions?.playerCaptionsTracklistRenderer?.captionTracks;
 
     if (!Array.isArray(tracks) || tracks.length === 0) {
-      return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
+      return res.status(200).json({ captions: null });
     }
 
     // 한국어 자막 트랙 선택 (수동 우선, 자동생성 폴백)
@@ -59,23 +56,23 @@ exports.handler = async (event) => {
     const selected = koManual || koAuto;
 
     if (!selected) {
-      return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
+      return res.status(200).json({ captions: null });
     }
 
     // 서명된 baseUrl로 timedtext API 호출
     const fullText = await fetchCaptionText(selected.baseUrl);
 
     if (!fullText || fullText.length < 100) {
-      return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
+      return res.status(200).json({ captions: null });
     }
 
-    return { statusCode: 200, headers, body: JSON.stringify({ captions: fullText }) };
+    return res.status(200).json({ captions: fullText });
 
   } catch (e) {
     console.error(`[captions] 에러:`, e.message);
-    return { statusCode: 200, headers, body: JSON.stringify({ captions: null }) };
+    return res.status(200).json({ captions: null });
   }
-};
+}
 
 /**
  * timedtext API에서 자막 텍스트 추출
@@ -83,12 +80,12 @@ exports.handler = async (event) => {
  */
 async function fetchCaptionText(baseUrl) {
   try {
-    const res = await fetch(baseUrl, {
+    const captionRes = await fetch(baseUrl, {
       headers: { 'User-Agent': ANDROID_UA },
     });
 
-    if (!res.ok) return null;
-    const xml = await res.text();
+    if (!captionRes.ok) return null;
+    const xml = await captionRes.text();
     if (!xml || xml.length === 0) return null;
 
     // srv3 형식: <p t="ms" d="ms"><s>텍스트</s></p> 또는 <text start="" dur="">텍스트</text>

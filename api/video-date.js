@@ -1,22 +1,19 @@
 /* ═══════════════════════════════════════════════════════
-   video-date — YouTube 영상 발행 날짜 조회
+   video-date — YouTube 영상 발행 날짜 조회 (Vercel Serverless Function)
    YouTube watch 페이지 HTML에서 datePublished 추출
    API 키 불필요
    ═══════════════════════════════════════════════════════ */
 
-exports.handler = async (event) => {
-  const headers = {
-    'Content-Type': 'application/json',
-    'Access-Control-Allow-Origin': '*',
-  };
+export default async function handler(req, res) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
 
-  const videoId = event.queryStringParameters?.videoId;
+  const videoId = req.query.videoId;
   if (!videoId) {
-    return { statusCode: 400, headers, body: JSON.stringify({ error: 'videoId required' }) };
+    return res.status(400).json({ error: 'videoId required' });
   }
 
   try {
-    const res = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
+    const pageRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
         'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
@@ -24,9 +21,9 @@ exports.handler = async (event) => {
       },
     });
 
-    if (!res.ok) throw new Error(`YouTube 페이지 요청 실패: ${res.status}`);
+    if (!pageRes.ok) throw new Error(`YouTube 페이지 요청 실패: ${pageRes.status}`);
 
-    const html = await res.text();
+    const html = await pageRes.text();
 
     // YYYY-MM-DD 직접 매칭 패턴 (우선순위 순)
     const directPatterns = [
@@ -40,7 +37,7 @@ exports.handler = async (event) => {
     for (const pattern of directPatterns) {
       const match = html.match(pattern);
       if (match) {
-        return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: match[1] }) };
+        return res.status(200).json({ publishedAt: match[1] });
       }
     }
 
@@ -49,17 +46,17 @@ exports.handler = async (event) => {
     if (koMatch) {
       const parsed = parseKoreanDate(koMatch[1]);
       if (parsed) {
-        return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: parsed }) };
+        return res.status(200).json({ publishedAt: parsed });
       }
     }
 
     // 날짜를 찾지 못한 경우
-    return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: null }) };
+    return res.status(200).json({ publishedAt: null });
 
   } catch (e) {
-    return { statusCode: 200, headers, body: JSON.stringify({ publishedAt: null }) };
+    return res.status(200).json({ publishedAt: null });
   }
-};
+}
 
 /**
  * 한국어 날짜 문자열을 YYYY-MM-DD로 변환
