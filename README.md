@@ -47,8 +47,9 @@ api/
   ├── gemini.js         ← Gemini API 프록시
   ├── captions.js       ← YouTube 자막 추출
   ├── video-date.js     ← 영상 발행 날짜 조회
-  ├── youtube-feed.js   ← 채널 RSS 피드 조회
-  └── og.js             ← OG 이미지 동적 생성
+  └── youtube-feed.js   ← 채널 RSS 피드 조회
+images/
+  └── og-image.png      ← OG 미리보기 이미지
 reference/              ← 분석 결과 MD 참고 파일
 ```
 
@@ -74,7 +75,6 @@ GEMINI_MODEL=gemini-3.1-flash-lite-preview
 ### 실행
 
 ```bash
-npm install
 npx vercel dev
 ```
 
