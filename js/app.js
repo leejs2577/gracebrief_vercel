@@ -277,12 +277,19 @@
     disableAnalyzeBtn(true);
 
     try {
-      // Step 1: 영상 정보 + 자막 추출 (병렬)
+      // Step 1·2: 영상 정보 + 자막 추출 (병렬)
       updateStep('step1', 'active', '준비중');
       updateStep('step2', 'active', '자막 추출 중');
-      updateProgressBar(15);
+      updateProgressBar(5);
+
+      // Step 1·2 진행 중 부드러운 증가 (5% → 35%, 500ms 간격)
+      const step12Timer = setInterval(() => {
+        const current = parseFloat($('#progressBar').style.width) || 5;
+        if (current < 35) updateProgressBar(Math.min(current + 2, 35));
+      }, 500);
 
       const videoInfo = await YouTube.fetchVideoInfo(videoId);
+      clearInterval(step12Timer);
 
       showVideoPreview(videoInfo);
       updateStep('step1', 'done', '완료');
@@ -297,14 +304,24 @@
 
       // Step 3: 설교 내용 분석
       updateStep('step3', 'active', videoInfo.captions ? '자막 기반 분석 중' : '영상 직접 분석 중');
-      updateProgressBar(60);
+      updateProgressBar(45);
 
-      // 분석 중 60% → 90% 서서히 증가
+      // 분석 중 감속 곡선 (45% → 92%)
+      // 초반 빠르게, 후반 느리게 — 실제 분석 체감 반영
       const progressTimer = setInterval(() => {
-        const bar = $('#progressBar');
-        const current = parseFloat(bar.style.width) || 60;
-        if (current < 90) updateProgressBar(Math.min(current + 0.8, 90));
-      }, 300);
+        const current = parseFloat($('#progressBar').style.width) || 45;
+        let increment;
+        if (current < 65) {
+          increment = 1.2;       // 초반(45~65%): 빠르게
+        } else if (current < 80) {
+          increment = 0.5;       // 중반(65~80%): 보통
+        } else if (current < 92) {
+          increment = 0.2;       // 후반(80~92%): 느리게
+        } else {
+          return;                // 92%에서 대기
+        }
+        updateProgressBar(Math.min(current + increment, 92));
+      }, 400);
 
       let analysisResult;
       try {

@@ -1,82 +1,107 @@
-# 📖 설교 분석기 — Sermon Analyzer
+# 말씀을삶으로 — 설교 요약 도우미
 
-YouTube 설교 영상을 Gemini AI가 직접 시청·분석하여 **요약, 내용 정리, 결론 및 묵상 포인트**를 자동 생성하는 웹 앱입니다.
+YouTube 설교 영상을 Gemini AI가 분석하여 **요약, 내용 정리, 결론 및 묵상 포인트**를 자동 생성하는 웹 앱입니다.
 
----
-
-## ✅ 주요 기능
-
-### 핵심 기능
-- **YouTube URL 입력** → 영상 정보 자동 추출 (oEmbed API)
-- **Gemini AI 영상 직접 분석** — 자막 추출 없이 Gemini가 YouTube 영상을 직접 시청·음성 분석
-- **3단 구조 분석 결과**:
-  1. 📌 설교 전체 요약 (3~5문장, 설명체)
-  2. 📋 내용 정리 (영상 길이에 따라 3~8개 섹션, 소제목·부제·핵심 포인트·성경 인용)
-  3. 🙏 결론 및 묵상 (핵심 포인트, 묵상 질문 4개, 마무리 말씀)
-
-### 문체 특징
-- **설명체 존댓말** — "~합니다/~입니다" 체계, "본 설교는~" 같은 3인칭 서술 금지
-- **Bold + 강조색** — 중요 문장은 **bold**, 핵심 선언은 bold + 빨간 글자색 처리
-- 읽는 사람이 설교를 직접 들은 것처럼 느끼는 정리노트 스타일
-
-### 메타 정보 추출
-- 설교 제목, 설교자, 교회명, 성경 본문, 예배 종류
-- YouTube 영상 발행일 자동 추출, 핵심 태그 5~8개
-
-### 내보내기 (3가지)
-- **Markdown** — Obsidian 호환 frontmatter 포함
-- **이미지** — PNG 고해상도 캡처 (html2canvas)
-- **HTML** — 독립 실행 가능한 단일 HTML 파일
-
-### UI/UX
-- 🎨 Glass-morphism 디자인 + Ambient 배경 오브
-- 🌙 다크/라이트 모드 (Tailwind CSS class 기반)
-- 📱 완전 반응형 (모바일~데스크탑)
+> **배포 URL**: https://gracebrief.vercel.app
 
 ---
 
-## 🛠 기술 스택
+## 주요 기능
 
-| 분류 | 라이브러리 | 용도 |
-|------|-----------|------|
-| CSS | **Tailwind CSS** (CDN) | 유틸리티 퍼스트 스타일링 |
-| 아이콘 | **Lucide Icons** | 모던 SVG 아이콘 |
-| 폰트 | **Pretendard** + **Noto Serif KR** | 한글 타이포그래피 |
-| 이미지 | **html2canvas** | PNG 내보내기 |
-| AI | **Google Gemini API** | 영상 직접 분석 |
+- **YouTube URL 입력** → 영상 메타정보 자동 추출
+- **자막 기반 분석** — 한국어 자막이 있으면 자막을 기반으로 빠르게 분석
+- **영상 직접 분석** — 자막이 없으면 Gemini AI가 영상을 직접 시청·분석
+- **3단 구조 결과**: 설교 요약 → 내용 정리 (섹션별) → 결론 및 묵상
+- **내보내기**: Markdown / 이미지(PNG) / HTML
+- **다크모드 지원**, 완전 반응형 (모바일~데스크탑)
 
 ---
 
-## 📂 파일 구조
+## 기술 스택
+
+| 분류 | 기술 | 용도 |
+|------|------|------|
+| 프론트엔드 | HTML + Vanilla JS | 빌드 도구 없는 정적 SPA |
+| 스타일 | Tailwind CSS (CDN) | 유틸리티 퍼스트 스타일링 |
+| 아이콘 | Lucide Icons | 모던 SVG 아이콘 |
+| 폰트 | Pretendard + Noto Serif KR | 한글 타이포그래피 |
+| 이미지 | html2canvas | PNG 내보내기 |
+| AI | Google Gemini API | 설교 분석 |
+| 배포 | Vercel | Serverless Functions + 정적 호스팅 |
+
+---
+
+## 파일 구조
 
 ```
 index.html              ← 메인 SPA
-css/style.css           ← 커스텀 CSS (glass-morphism, 강조 스타일)
+guide.html              ← 사용 가이드
+css/style.css           ← 커스텀 CSS
 js/
-  ├── api-config.js     ← Gemini API 키 관리
-  ├── youtube.js        ← URL 파싱 + oEmbed
+  ├── youtube.js        ← URL 파싱 + oEmbed + 자막/날짜 조회
   ├── llm-provider.js   ← Gemini API 호출
-  ├── analyzer.js       ← 설교 분석 프롬프트 엔진
+  ├── analyzer.js       ← 설교 분석 프롬프트 + JSON 파싱
   ├── renderer.js       ← 결과 렌더링 + 내보내기
   └── app.js            ← 메인 컨트롤러
+api/
+  ├── gemini.js         ← Gemini API 프록시
+  ├── captions.js       ← YouTube 자막 추출
+  ├── video-date.js     ← 영상 발행 날짜 조회
+  ├── youtube-feed.js   ← 채널 RSS 피드 조회
+  └── og.js             ← OG 이미지 동적 생성
 reference/              ← 분석 결과 MD 참고 파일
 ```
 
 ---
 
-## 🚀 사용 방법
+## 로컬 개발
 
-1. 상단 **⚙️ API 설정** 클릭 → Gemini API 키 입력 → 모델 선택 → 저장
-2. YouTube 설교 영상 URL 붙여넣기
-3. **분석 시작** 클릭 (1~3분 소요)
-4. 결과 확인 → MD / 이미지 / HTML로 내보내기
+### 사전 요구사항
+
+- Node.js 20+
+- [Vercel CLI](https://vercel.com/docs/cli)
+- [Gemini API 키](https://aistudio.google.com)
+
+### 환경변수 설정
+
+프로젝트 루트에 `.env.local` 파일 생성:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key
+GEMINI_MODEL=gemini-3.1-flash-lite-preview
+```
+
+### 실행
+
+```bash
+npm install
+npx vercel dev
+```
+
+`http://localhost:3000` 에서 확인 가능합니다.
 
 ---
 
-## ⚠️ 제한사항
+## 배포
 
-- **Gemini API 전용** (OpenAI 미지원)
-- API 키는 사용자가 직접 발급 필요 ([Google AI Studio](https://aistudio.google.com))
+### Vercel 배포
+
+1. GitHub 레포지토리 연결
+2. Vercel 대시보드에서 환경변수 설정 (`GEMINI_API_KEY`, `GEMINI_MODEL`)
+3. `git push` 시 자동 배포
+
+### 환경변수 (Vercel)
+
+| 변수 | 필수 | 설명 |
+|------|------|------|
+| `GEMINI_API_KEY` | O | Google Gemini API 키 |
+| `GEMINI_MODEL` | X | 사용할 모델명 (기본값: `gemini-3.1-flash-lite-preview`) |
+
+---
+
+## 제한사항
+
+- Gemini API 전용 (OpenAI 미지원)
 - 매우 긴 설교(2시간+)는 일부 내용 누락 가능
 
 ---
