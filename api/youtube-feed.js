@@ -1,6 +1,12 @@
 /* ═══════════════════════════════════════════════════════
-   youtube-feed — YouTube 채널 RSS 피드 조회 (Vercel Serverless Function)
+   youtube-feed — YouTube Data API v3로 채널 최근 영상 조회 (Vercel Serverless Function)
+   RSS 피드 대신 Data API 사용 (Vercel 서버에서 RSS가 차단되는 문제 해결)
    ═══════════════════════════════════════════════════════ */
+
+const YOUTUBE_API_BASE = 'https://www.googleapis.com/youtube/v3';
+
+// 라이브 영상 제외 키워드
+const LIVE_KEYWORDS = ['라이브', 'LIVE', 'Live', '실시간', '🔴', '스트리밍', 'streaming', 'Streaming', '새벽기도회'];
 
 export default async function handler(req, res) {
   const channelUrl = req.query.channelUrl;
@@ -8,59 +14,70 @@ export default async function handler(req, res) {
     return res.status(400).json({ error: '채널 URL이 필요합니다.' });
   }
 
+  const apiKey = process.env.YOUTUBE_DATA_API_KEY;
+  if (!apiKey) {
+    return res.status(500).json({ error: 'YouTube API 키가 설정되지 않았습니다.' });
+  }
+
   try {
     let channelId;
+    let channelName = '';
 
     // /channel/UCxxx 형식에서 직접 추출
     const directMatch = channelUrl.match(/youtube\.com\/channel\/(UC[a-zA-Z0-9_-]+)/);
     if (directMatch) {
       channelId = directMatch[1];
+      // 채널명 조회
+      const chRes = await fetch(
+        `${YOUTUBE_API_BASE}/channels?part=snippet&id=${channelId}&key=${apiKey}`
+      );
+      const chData = await chRes.json();
+      channelName = chData.items?.[0]?.snippet?.title || '';
     } else {
-      // /@handle 등의 형식 — 채널 페이지 HTML에서 channelId 추출
-      const normalizedUrl = new URL(channelUrl).href;
-      const pageRes = await fetch(normalizedUrl, {
-        headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SermonAnalyzer/1.0)' }
-      });
-      if (!pageRes.ok) {
-        return res.status(400).json({ error: '채널 페이지를 불러올 수 없습니다.' });
+      // /@handle 형식 — channels.list API로 채널ID 조회
+      const handleMatch = channelUrl.match(/youtube\.com\/@([^/?&]+)/);
+      if (!handleMatch) {
+        return res.status(400).json({ error: '지원하지 않는 채널 URL 형식입니다.' });
       }
-      const html = await pageRes.text();
-      const match =
-        html.match(/"externalId":"(UC[a-zA-Z0-9_-]+)"/) ||
-        html.match(/"channelId":"(UC[a-zA-Z0-9_-]+)"/) ||
-        html.match(/"browseId":"(UC[a-zA-Z0-9_-]+)"/);
-      if (!match) {
-        return res.status(400).json({ error: '채널 ID를 찾을 수 없습니다. URL을 확인해주세요.' });
+      const handle = handleMatch[1];
+
+      const chRes = await fetch(
+        `${YOUTUBE_API_BASE}/channels?part=snippet&forHandle=${encodeURIComponent(handle)}&key=${apiKey}`
+      );
+      if (!chRes.ok) {
+        return res.status(400).json({ error: `채널 정보를 가져올 수 없습니다. (HTTP ${chRes.status})` });
       }
-      channelId = match[1];
+      const chData = await chRes.json();
+
+      if (!chData.items || chData.items.length === 0) {
+        return res.status(400).json({ error: '채널을 찾을 수 없습니다. URL을 확인해주세요.' });
+      }
+      channelId = chData.items[0].id;
+      channelName = chData.items[0].snippet?.title || '';
     }
 
-    // RSS 피드 조회
-    const rssUrl = `https://www.youtube.com/feeds/videos.xml?channel_id=${channelId}`;
-    const rssRes = await fetch(rssUrl, {
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; SermonAnalyzer/1.0)' }
-    });
-    if (!rssRes.ok) {
-      return res.status(400).json({ error: `RSS 피드를 가져올 수 없습니다. (HTTP ${rssRes.status})` });
+    // 업로드 재생목록 ID: 채널ID의 UC → UU
+    const uploadPlaylistId = 'UU' + channelId.slice(2);
+
+    // playlistItems.list로 최근 업로드 영상 조회 (최대 15개, 필터 후 5개 반환)
+    const plRes = await fetch(
+      `${YOUTUBE_API_BASE}/playlistItems?part=snippet&playlistId=${uploadPlaylistId}&maxResults=15&key=${apiKey}`
+    );
+    if (!plRes.ok) {
+      return res.status(400).json({ error: `영상 목록을 가져올 수 없습니다. (HTTP ${plRes.status})` });
     }
-    const xml = await rssRes.text();
+    const plData = await plRes.json();
 
-    // 라이브 영상 제외 키워드
-    const LIVE_KEYWORDS = ['라이브', 'LIVE', 'Live', '실시간', '🔴', '스트리밍', 'streaming', 'Streaming', '새벽기도회'];
+    if (!plData.items) {
+      return res.status(200).json({ channelId, channelName, videos: [] });
+    }
 
-    // 최근 항목 파싱 (라이브 제외, 최대 5개)
-    const videos = [...xml.matchAll(/<entry>([\s\S]*?)<\/entry>/g)]
-      .map(m => {
-        const entry = m[1];
-        const videoId = entry.match(/<yt:videoId>([^<]+)<\/yt:videoId>/)?.[1] || '';
-        const rawTitle = entry.match(/<title>([^<]+)<\/title>/)?.[1] || '';
-        const title = rawTitle
-          .replace(/&amp;/g, '&')
-          .replace(/&lt;/g, '<')
-          .replace(/&gt;/g, '>')
-          .replace(/&quot;/g, '"')
-          .replace(/&#39;/g, "'");
-        const published = entry.match(/<published>([^<]+)<\/published>/)?.[1] || '';
+    const videos = plData.items
+      .map(item => {
+        const snippet = item.snippet;
+        const videoId = snippet.resourceId?.videoId || '';
+        const title = snippet.title || '';
+        const published = snippet.publishedAt || '';
         return {
           videoId,
           title,
@@ -69,11 +86,8 @@ export default async function handler(req, res) {
           thumbnail: `https://img.youtube.com/vi/${videoId}/mqdefault.jpg`
         };
       })
-      .filter(v => !LIVE_KEYWORDS.some(kw => v.title.includes(kw)))
+      .filter(v => v.videoId && !LIVE_KEYWORDS.some(kw => v.title.includes(kw)))
       .slice(0, 5);
-
-    // 피드 최상위 <title> 태그에서 채널명 추출
-    const channelName = xml.match(/<title>([^<]+)<\/title>/)?.[1] || '';
 
     return res.status(200).json({ channelId, channelName, videos });
   } catch (err) {
