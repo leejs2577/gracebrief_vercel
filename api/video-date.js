@@ -1,7 +1,7 @@
 /* ═══════════════════════════════════════════════════════
    video-date — YouTube 영상 발행 날짜 조회 (Vercel Serverless Function)
-   YouTube watch 페이지 HTML에서 datePublished 추출
-   API 키 불필요
+   1순위: YouTube Data API v3 (publishedAt 전체 타임스탬프 → KST 변환)
+   2순위: YouTube watch 페이지 HTML 스크래핑 (API 키 없을 때 폴백)
    ═══════════════════════════════════════════════════════ */
 
 export default async function handler(req, res) {
@@ -13,6 +13,22 @@ export default async function handler(req, res) {
   }
 
   try {
+    // 1순위: YouTube Data API — 정확한 UTC 타임스탬프를 KST로 변환
+    const apiKey = process.env.YOUTUBE_DATA_API_KEY;
+    if (apiKey) {
+      const apiRes = await fetch(
+        `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`
+      );
+      if (apiRes.ok) {
+        const data = await apiRes.json();
+        const publishedAt = data.items?.[0]?.snippet?.publishedAt;
+        if (publishedAt) {
+          return res.status(200).json({ publishedAt: toKSTDate(publishedAt) });
+        }
+      }
+    }
+
+    // 2순위: HTML 스크래핑 폴백 (API 키 없거나 API 실패 시)
     const pageRes = await fetch(`https://www.youtube.com/watch?v=${videoId}`, {
       headers: {
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36',
