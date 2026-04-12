@@ -25,19 +25,19 @@ export default async function handler(req, res) {
 
     const html = await pageRes.text();
 
-    // YYYY-MM-DD 직접 매칭 패턴 (우선순위 순)
+    // ISO 타임스탬프 전체 캡처 후 KST 변환 (우선순위 순)
     const directPatterns = [
-      /"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2})/,
-      /"publishDate"\s*:\s*"(\d{4}-\d{2}-\d{2})/,
-      /"uploadDate"\s*:\s*"(\d{4}-\d{2}-\d{2})/,
-      /itemprop="datePublished"\s+content="(\d{4}-\d{2}-\d{2})/,
-      /itemprop="uploadDate"\s+content="(\d{4}-\d{2}-\d{2})/,
+      /"datePublished"\s*:\s*"(\d{4}-\d{2}-\d{2}(?:T[^"]+)?)"/,
+      /"publishDate"\s*:\s*"(\d{4}-\d{2}-\d{2}(?:T[^"]+)?)"/,
+      /"uploadDate"\s*:\s*"(\d{4}-\d{2}-\d{2}(?:T[^"]+)?)"/,
+      /itemprop="datePublished"\s+content="(\d{4}-\d{2}-\d{2}(?:T[^"]+)?[^"]*)"/,
+      /itemprop="uploadDate"\s+content="(\d{4}-\d{2}-\d{2}(?:T[^"]+)?[^"]*)"/,
     ];
 
     for (const pattern of directPatterns) {
       const match = html.match(pattern);
       if (match) {
-        return res.status(200).json({ publishedAt: match[1] });
+        return res.status(200).json({ publishedAt: toKSTDate(match[1]) });
       }
     }
 
@@ -56,6 +56,17 @@ export default async function handler(req, res) {
   } catch (e) {
     return res.status(200).json({ publishedAt: null });
   }
+}
+
+/**
+ * ISO 타임스탬프 → KST(UTC+9) 기준 YYYY-MM-DD 반환
+ * Vercel 서버 타임존 무관하게 명시적으로 +9h 적용
+ */
+function toKSTDate(isoString) {
+  const date = new Date(isoString);
+  if (isNaN(date.getTime())) return isoString.slice(0, 10);
+  const kst = new Date(date.getTime() + 9 * 60 * 60 * 1000);
+  return kst.toISOString().slice(0, 10);
 }
 
 /**
