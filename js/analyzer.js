@@ -228,13 +228,24 @@ ${videoInfo.captions}` : ''}`;
   }
 
   /**
+   * 설교자 이름에 직책이 없으면 "목사" 추가
+   * 이미 목사/전도사/장로/권사/집사 등이 포함된 경우 그대로 유지
+   */
+  function appendTitle(name) {
+    if (!name) return name;
+    const titles = ['목사', '전도사', '장로', '권사', '집사', '선교사', '목사님', '전도사님'];
+    if (titles.some(t => name.includes(t))) return name;
+    return name + ' 목사';
+  }
+
+  /**
    * 응답 구조 검증 및 정규화
    */
   function validateAndNormalize(data) {
     const result = {
       meta: {
         date: data.meta?.date || '',
-        preacher: data.meta?.preacher || '',
+        preacher: appendTitle(data.meta?.preacher || ''),
         church: data.meta?.church || '',
         scripture: data.meta?.scripture || '',
         title: data.meta?.title || '설교 제목',
